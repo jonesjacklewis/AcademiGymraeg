@@ -33,6 +33,5 @@ build/
 .vscode/
 
 ### ptg22svs properties files ###
-/home/peter/git/AcademiGymraeg/src/main/resources/application.properties
-/home/peter/git/AcademiGymraeg/src/main/resources/application-ptg22svs.properties.old
-/home/peter/git/AcademiGymraeg/bin
+/home/peter/git/AcademiGymraeg/bin/src/main/resources/application-ptg22svs.properties.old
+/home/peter/git/AcademiGymraeg/bin/src/main/resources/application.properties
