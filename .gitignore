@@ -32,5 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 
-### application.properties ###
-src/main/resources/application-cnb22xdk.properties
+### ptg22svs properties files ###
+/home/peter/git/AcademiGymraeg/src/main/resources/application.properties
+/home/peter/git/AcademiGymraeg/src/main/resources/application-ptg22svs.properties.old
