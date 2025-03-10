@@ -22,80 +22,80 @@ public class Noun  {
 	@GeneratedValue
 	@Column(nullable = false, updatable = false)
 	@NotBlank
-	private int Id;
+	private int id;
 	
 	
 	/**
-	 * WelshNoun attribute. The Welsh language representation of the Noun.
+	 * welshNoun attribute. The Welsh language representation of the Noun.
 	 */
 	@Column(nullable = false)
 	@NotBlank
-	private String WelshNoun;
+	private String welshNoun;
 	
 	
 	/**
-	 * EnglishNoun attribute. The English language representation of the Noun.
+	 * englishNoun attribute. The English language representation of the Noun.
 	 */
 	@Column(nullable = false)
 	@NotBlank
-	private String EnglishNoun;
+	private String englishNoun;
 	
 	
 	/**
-	 * Gender attribute. Represents the gender classification for the Welsh language representation of the noun.
+	 * gender attribute. Represents the gender classification for the Welsh language representation of the noun.
 	 * Attribute is of type "Gender", which allows 3 values: Masculine, Feminine and Plural
 	 */
 	@Column(nullable = false)
 	@NotBlank
-	private Gender Gender;
+	private Gender gender;
 
 	/**
-	 * @return The value of "WelshNoun"
+	 * @return The value of "welshNoun"
 	 */
 	public String getWelshNoun() {
-		return WelshNoun;
+		return welshNoun;
 	}
 
 	/**
-	 * @param welshNoun=the value to assign to WelshNoun
+	 * @param welshNoun=the value to assign to welshNoun
 	 */
 	public void setWelshNoun(String welshNoun) {
-		WelshNoun = welshNoun;
+		welshNoun = welshNoun;
 	}
 
 	/**
-	 * @return The value of "EnglishNoun"
+	 * @return The value of "englishNoun"
 	 */
 	public String getEnglishNoun() {
-		return EnglishNoun;
+		return englishNoun;
 	}
 
 	/**
-	 * @param englishNoun=the value to assign to EnglishNoun
+	 * @param englishNoun=the value to assign to englishNoun
 	 */
 	public void setEnglishNoun(String englishNoun) {
-		EnglishNoun = englishNoun;
+		englishNoun = englishNoun;
 	}
 
 	/**
-	 * @return The value of "Gender"
+	 * @return The value of "gender"
 	 */
 	public Gender getGender() {
-		return Gender;
+		return gender;
 	}
 
 	/**
 	 * @param gender=the value to assign to Gender
 	 */
 	public void setGender(Gender gender) {
-		Gender = gender;
+		gender = gender;
 	}
 
 	/**
-	 * @return The value of "Id"
+	 * @return The value of "id"
 	 */
 	public int getId() {
-		return Id;
+		return id;
 	}
 	
 }
