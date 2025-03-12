@@ -22,7 +22,7 @@ public class Noun  {
 	@GeneratedValue
 	@Column(nullable = false, updatable = false)
 	@NotBlank
-	private int Id;
+	private int id;
 	
 	
 	/**
@@ -30,7 +30,7 @@ public class Noun  {
 	 */
 	@Column(nullable = false)
 	@NotBlank
-	private String WelshNoun;
+	private String welshNoun;
 	
 	
 	/**
@@ -38,7 +38,7 @@ public class Noun  {
 	 */
 	@Column(nullable = false)
 	@NotBlank
-	private String EnglishNoun;
+	private String englishNoun;
 	
 	
 	/**
@@ -47,55 +47,39 @@ public class Noun  {
 	 */
 	@Column(nullable = false)
 	@NotBlank
-	private Gender Gender;
+	private Gender gender;
 
-	/**
-	 * @return The value of "WelshNoun"
-	 */
+
 	public String getWelshNoun() {
-		return WelshNoun;
+		return welshNoun;
 	}
 
-	/**
-	 * @param welshNoun=the value to assign to WelshNoun
-	 */
 	public void setWelshNoun(String welshNoun) {
-		WelshNoun = welshNoun;
+		welshNoun = welshNoun;
 	}
 
-	/**
-	 * @return The value of "EnglishNoun"
-	 */
+
 	public String getEnglishNoun() {
-		return EnglishNoun;
+		return englishNoun;
 	}
 
-	/**
-	 * @param englishNoun=the value to assign to EnglishNoun
-	 */
+	
 	public void setEnglishNoun(String englishNoun) {
-		EnglishNoun = englishNoun;
+		englishNoun = englishNoun;
 	}
 
-	/**
-	 * @return The value of "Gender"
-	 */
+	
 	public Gender getGender() {
-		return Gender;
+		return gender;
 	}
 
-	/**
-	 * @param gender=the value to assign to Gender
-	 */
+	
 	public void setGender(Gender gender) {
-		Gender = gender;
+		gender = gender;
 	}
 
-	/**
-	 * @return The value of "Id"
-	 */
 	public int getId() {
-		return Id;
+		return id;
 	}
 	
 }
