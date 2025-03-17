@@ -23,7 +23,7 @@ public class Question {
 	@GeneratedValue
 	@Column(nullable = false, updatable = false)
 	@NotBlank
-	private int id;
+	private Long id;
 
     /**
 	 * Question attribute. The string containing the actual question being asked.
@@ -52,7 +52,7 @@ public class Question {
 	private String _givenAnswer;
 
 
-    public int getId(){
+    public Long getId(){
         return id;
     }
 
