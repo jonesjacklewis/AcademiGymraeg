@@ -67,6 +67,7 @@ public class User implements UserDetails {
 	/*
 	 * Assigns specified access to user accounts based on
 	 * if they are an administrator and/or instructor.
+	 * Overrides existing default method
 	 */
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -81,40 +82,6 @@ public class User implements UserDetails {
 		return authorities;
 	}
 	
-	public boolean isAdmin() {
-		return admin;
-	}
-	
-	public boolean isInstructor() {
-		return instructor;
-	}
-
-	public void setAdmin(boolean admin) {
-		this.admin = admin;
-	}
-	
-	public void setInstructor(boolean instructor) {
-		this.instructor = instructor;
-	}
-
-	@Override
-	public String getPassword() {
-		return password;
-	}
-
-	@Override
-	public String getUsername() {
-		return emailAddress;
-	}
-
-	public void setUsername(String username) {
-		this.emailAddress = username;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	
 	public Long getUserId() {
 		return userId;
 	}
@@ -123,6 +90,16 @@ public class User implements UserDetails {
 		this.userId = userId;
 	}
 
+	/* Overrides existing default method */
+	@Override
+	public String getUsername() {
+		return emailAddress;
+	}
+
+	public void setUsername(String username) {
+		this.emailAddress = username;
+	}
+	
 	public String getForename() {
 		return forename;
 	}
@@ -130,7 +107,31 @@ public class User implements UserDetails {
 	public void setForename(String forename) {
 		this.forename = forename;
 	}
+	
+	/* Overrides existing default method */
+	@Override
+	public String getPassword() {
+		return password;
+	}
 
+	public void setPassword(String password) {
+		this.password = password;
+	}
 	
+	public boolean isAdmin() {
+		return admin;
+	}
 	
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
+	}
+	
+	public boolean isInstructor() {
+		return instructor;
+	}
+	
+	public void setInstructor(boolean instructor) {
+		this.instructor = instructor;
+	}
+
 }
