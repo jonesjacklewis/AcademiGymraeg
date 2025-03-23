@@ -1,11 +1,11 @@
-package uk.ac.bangor.cs.cambria.AcademiGymraeg.Model;
+package uk.ac.bangor.cs.cambria.AcademiGymraeg.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
-import uk.ac.bangor.cs.cambria.AcademiGymraeg.Enum.QuestionType;
+import uk.ac.bangor.cs.cambria.AcademiGymraeg.enums.QuestionType;
 
 /**
  * @author dwp22pzv

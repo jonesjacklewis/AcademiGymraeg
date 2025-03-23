@@ -1,4 +1,4 @@
-package uk.ac.bangor.cs.cambria.AcademiGymraeg.Enum;
+package uk.ac.bangor.cs.cambria.AcademiGymraeg.enums;
 
 /**
  * @author dwp22pzv

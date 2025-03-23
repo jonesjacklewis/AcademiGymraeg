@@ -2,14 +2,14 @@
  * This model class represents Noun objects, which form the subject of a given question on a test.
  * This class is marked with the @Entity attribute, and will therefore be mirrored in the database, as the Noun TABLE
  */
-package uk.ac.bangor.cs.cambria.AcademiGymraeg.Model;
+package uk.ac.bangor.cs.cambria.AcademiGymraeg.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import uk.ac.bangor.cs.cambria.AcademiGymraeg.Enum.Gender;
+import uk.ac.bangor.cs.cambria.AcademiGymraeg.enums.Gender;
 
 /**
  * @author ptg22svs, cnb22xdk
@@ -25,8 +25,7 @@ public class Noun  {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(nullable = false, updatable = false)
-	@NotBlank
-	private int id;
+	private Long id;
 	
 	
 	/**
@@ -92,13 +91,13 @@ public class Noun  {
 	}
 
 	public void setId(Long nounId) {
-		this.Id = nounId;
+		this.id = nounId;
 	}
 	
 	/**
 	 * @return The value of "id"
 	 */
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 	

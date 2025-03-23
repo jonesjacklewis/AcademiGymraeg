@@ -1,4 +1,4 @@
-package uk.ac.bangor.cs.cambria.AcademiGymraeg.Model;
+package uk.ac.bangor.cs.cambria.AcademiGymraeg.model;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -18,6 +19,7 @@ import jakarta.validation.constraints.NotNull;
 @Entity
 public class Test {
 
+	@Transient
 	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 	
 	@Id

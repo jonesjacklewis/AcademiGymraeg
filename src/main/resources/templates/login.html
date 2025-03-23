@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="jcj23xfb">
+    <title>Academi Gymraeg | Log In</title>
+</head>
+<body>
+    <h1>Home</h1>
+
+    <div id="logInGroup">
+        <form th:action="@{/login}" method="post">
+            <label for="username">Enter your username/email: </label>
+            <input type="text" name="username" id="username" placeholder="Enter your username/email" required><br>
+    
+            <label for="password">Enter your password: </label>
+            <input type="password" name="password" id="password" placeholder="Enter your password" required><br>
+    
+            <button type="submit">Log In</button>
+        </form>
+
+        <button id="forgotPasswordBtn">Forgot Password</button>
+    </div>
+
+    
+    <script>
+		
+		const forgotPasswordBtn = document.querySelector("#forgotPasswordBtn");
+		
+		forgotPasswordBtn.addEventListener("click", () => {
+			alert("Please contact the system administrator to reset your password.");
+		});
+		
+       
+    </script>
+</body>
+</html>
