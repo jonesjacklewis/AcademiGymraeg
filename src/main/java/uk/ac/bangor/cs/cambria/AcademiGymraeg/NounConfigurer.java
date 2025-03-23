@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import jakarta.annotation.PostConstruct;
-import uk.ac.bangor.cs.cambria.AcademiGymraeg.Enum.Gender;
-import uk.ac.bangor.cs.cambria.AcademiGymraeg.Model.Noun;
+import uk.ac.bangor.cs.cambria.AcademiGymraeg.enums.Gender;
+import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.Noun;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.NounRepository;
 
 @Component

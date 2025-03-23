@@ -2,7 +2,7 @@ package uk.ac.bangor.cs.cambria.AcademiGymraeg.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import uk.ac.bangor.cs.cambria.AcademiGymraeg.Model.Noun;
+import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.Noun;
 
 /**
  * @author ptg22svs
