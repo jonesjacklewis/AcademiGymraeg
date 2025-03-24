@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class AddUserController {
-	@GetMapping("/register")
+	@GetMapping("/useradmin")
 	public String addUserPage() {
-		return "register";
+		return "useradmin";
 	}
 }
