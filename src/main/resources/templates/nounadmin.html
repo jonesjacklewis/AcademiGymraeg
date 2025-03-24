@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="ptg22svs">
+    <title>Academi Gymraeg | Noun Admin</title>
+</head>
+<body>
+    <h1>Noun Admin</h1>
+	
+	<form th:action="@{/nounadmin}" method="POST" th:object="${noun}">
+		<div>
+		<label for="englishnoun">English noun: </label>
+		<input type="text" id="englishnoun"><br>
+		<label for="welshnoun">Welsh noun: </label>
+		<input type="text" id="welshnoun">		
+		</div><br>
+		<div>
+		<label for="masculine">Masculine</label>
+		<input type="radio" id="masculine" name="gender" value="MASCULINE"><br>
+		<label for="feminine">Feminine</label>
+		<input type="radio" id="feminine" name="gender" value="FEMININE"><br>
+		</div><br><br>
+		
+		<input type="submit" name="Create Noun">
+	</form>
+	
+	<a href="/logout">Log Out </a>
+</body>
+</html>
