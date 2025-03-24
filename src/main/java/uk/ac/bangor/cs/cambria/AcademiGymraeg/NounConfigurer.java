@@ -13,36 +13,37 @@ public class NounConfigurer {
 
 	@Autowired
 	private NounRepository repo;
-	
+
 	@PostConstruct
 	void setupSomeNouns() {
-		
+
+		if (repo.count() > 0) {
+			return;
+		}
+
 		Noun n = new Noun();
 		n.setEnglishNoun("Aeroplane");
 		n.setWelshNoun("Awyren");
 		n.setGender(Gender.FEMININE);
 		repo.save(n);
-		
+
 		n = new Noun();
 		n.setEnglishNoun("Apple");
 		n.setWelshNoun("Afal");
 		n.setGender(Gender.MASCULINE);
 		repo.save(n);
-	
-		
+
 		n = new Noun();
 		n.setEnglishNoun("Book");
 		n.setWelshNoun("Llyfr");
 		n.setGender(Gender.MASCULINE);
 		repo.save(n);
-	
-		
+
 		n = new Noun();
 		n.setEnglishNoun("Business");
 		n.setWelshNoun("Busnes");
 		n.setGender(Gender.MASCULINE);
 		repo.save(n);
-	
-		
+
 	}
 }
