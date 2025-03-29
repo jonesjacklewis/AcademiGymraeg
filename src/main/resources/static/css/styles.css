@@ -1,0 +1,89 @@
+/* Author: grs22lkc */
+
+body {
+	margin: 0px 0px 0px 0px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+#header {
+	margin: 0px 0px;
+	height: auto;
+	background-color: #42797D;
+	display: flex;
+	justify-content: space-between;
+  	flex-direction: row;
+}
+
+#logo {
+	margin-left: 40px;
+}
+
+#logout {
+	color: white;
+	font-size: 20px;
+	margin-right: 40px;
+	padding-top: 60px;
+   	text-align: right;
+}
+
+#nav-bar {
+	margin: 0px 0px;
+	height: auto;
+	background-color: red;
+	display: flex;
+	justify-content: flex-start;
+  	flex-direction: row;
+}
+#nav-bar a {
+	padding: 10px 40px 10px 40px;
+	color: white;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+#container {
+	padding: 50px 50px 50px 50px;
+}
+
+h2 {
+	
+}
+
+#welcome-container {
+	display: flex;
+	justify-content: space-around;
+  	flex-direction: row;
+}
+
+#dragon {
+	width: 600px;
+}
+
+#welcome p {
+	color: red;
+	font-size: 40px;
+	font-weight: bold;
+	margin-top: 50px;
+	margin-bottom: 50px;
+	width: 600px;
+}
+
+#welcome a {
+	color: white;
+	background-color: green;
+	width: 200px;
+	height: auto;
+	font-size: 25px;
+	padding: 8px 48px 8px 48px;
+	text-decoration: none;
+}
+
+#logInGroup input {
+	margin-bottom: 14px;
+	width: 300px;
+}
+#logInGroup button {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	width: 300px;
+}
