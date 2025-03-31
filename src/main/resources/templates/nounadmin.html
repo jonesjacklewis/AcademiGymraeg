@@ -24,7 +24,7 @@
 		</th:block>
 		</div><br><br>
 		
-		<button type="submit" th:text="#{newnoun}">Create Noun</button>
+		<button type="submit">Create Noun</button>
 	</form>
 	
 	
@@ -42,7 +42,7 @@
 			<th th:text="${n.englishNoun}"></th>
 			<th th:text="${n.welshNoun}"></th>
 			<th th:text="${n.gender}"></th>
-			<th><a th:href="@{/deletenoun(id=${n.id})}">DELETE</a></th>
+			<th><a th:href="@{/noun/deletenoun/{id}(id = ${n.id})}">DELETE</a></th>
 		</tr>
 		</table>
 	</div>
