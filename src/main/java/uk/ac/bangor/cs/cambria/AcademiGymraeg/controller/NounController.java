@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,7 +42,21 @@ public class NounController {
 
 	
 	  @PostMapping 
-	  public String newnoun(Noun n, BindingResult result, Model m) {
+	  public String newNoun(Noun n, BindingResult result, Model m) throws Exception {
+		  
+		  //Validate what has been entered - alphabet only, lowercase, no spaces
+		  
+		  String regex = "([a-z])\\w*([^A-Z])*";
+		  
+		  if(!n.getEnglishNoun().matches(regex))
+		  {
+			  throw new Exception("Invalid input for English noun. Only lowercase letters allowed");
+		  }
+		  else if(!n.getWelshNoun().matches(regex))
+		  {
+			  throw new Exception("Invalid input for Welsh noun. Only lowercase letters allowed");
+		  }
+		  
 		  repo.save(n);
 		  
 		  return nounAdminPage(m);
@@ -51,7 +64,6 @@ public class NounController {
 	  }
 	  
 	  @GetMapping("/deletenoun/{id}")
-	  @PreAuthorize("hasRole('ADMIN')")	  
 	  public String deletenoun(@PathVariable("id") Long id)
 	  {
 		  repo.deleteById(id);
