@@ -15,8 +15,9 @@ public class QuestionController {
 	@Autowired
 	private QuestionRepository repo;
 	
-	//https://stackoverflow.com/questions/24279186/fetch-random-records-using-spring-data-jpa
+	//repo.save();
 	
-	//private List<Noun> = repo.
+	
+
 
 }
