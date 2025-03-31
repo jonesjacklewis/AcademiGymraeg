@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,22 +9,43 @@
 <body>
     <h1>Noun Admin</h1>
 	
-	<form th:action="@{/nounadmin}" method="POST" th:object="${noun}">
+	<h2>Add a new Noun</h2>
+	<form th:action="@{/noun}" method="POST" th:object="${noun}">
 		<div>
 		<label for="englishnoun">English noun: </label>
-		<input type="text" id="englishnoun"><br>
+		<input type="text" id="englishnoun" th:field="*{englishNoun}"><br>
 		<label for="welshnoun">Welsh noun: </label>
-		<input type="text" id="welshnoun">		
+		<input type="text" id="welshnoun" th:field="*{welshNoun}">		
 		</div><br>
 		<div>
-		<label for="masculine">Masculine</label>
-		<input type="radio" id="masculine" name="gender" value="MASCULINE"><br>
-		<label for="feminine">Feminine</label>
-		<input type="radio" id="feminine" name="gender" value="FEMININE"><br>
+		<th:block th:each="g : ${genders}">
+			<label th:text="${g}"></label>
+			<input type="radio" th:field="*{gender}" th:value="${g}"><br>
+		</th:block>
 		</div><br><br>
 		
-		<input type="submit" name="Create Noun">
+		<button type="submit" th:text="#{newnoun}">Create Noun</button>
 	</form>
+	
+	
+	<br>
+	<h2>All Nouns</h2>
+	<div>
+		<table>
+		 <tr>
+    		<th>English</th>
+    		<th>Welsh</th>
+    		<th>Gender</th>
+    		<th>Action</th>
+  		</tr>
+		<tr th:each="n : ${allnouns}">
+			<th th:text="${n.englishNoun}"></th>
+			<th th:text="${n.welshNoun}"></th>
+			<th th:text="${n.gender}"></th>
+			<th><a th:href="@{/deletenoun(id=${n.id})}">DELETE</a></th>
+		</tr>
+		</table>
+	</div>
 	
 	<a href="/logout">Log Out </a>
 </body>
