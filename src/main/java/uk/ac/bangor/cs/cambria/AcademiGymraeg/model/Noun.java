@@ -9,6 +9,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.enums.Gender;
 
 /**
@@ -31,12 +34,16 @@ public class Noun  {
 	/**
 	 * welshNoun attribute. The Welsh language representation of the Noun.
 	 */
+	@Pattern(regexp = "([a-zA-Z])+")
+	@NotBlank
 	@Column(nullable = false)
 	private String welshNoun;
 	
 	/**
 	 * englishNoun attribute. The English language representation of the Noun.
 	 */
+	@Pattern(regexp = "([a-zA-Z])+")
+	@NotBlank
 	@Column(nullable = false)
 	private String englishNoun;
 	
@@ -44,7 +51,8 @@ public class Noun  {
 	/**
 	 * gender attribute. Represents the gender classification for the Welsh language representation of the noun.
 	 * Attribute is of type "gender", which allows 3 values: Masculine, Feminine and Plural
-	 */
+	 */	
+	@NotNull
 	@Column(nullable = false)
 	private Gender gender;
 

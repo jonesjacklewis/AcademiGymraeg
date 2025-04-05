@@ -15,13 +15,28 @@
 		<div>
 		<label for="englishnoun">English noun: </label>
 		<input type="text" id="englishnoun" th:field="*{englishNoun}"><br>
+		<th:block th:each="e : ${#fields.errors('englishNoun')}">
+			<span style="color: red"><th:block
+					th:text="${e}"></th:block></span>
+			<br />
+		</th:block>
 		<label for="welshnoun">Welsh noun: </label>
-		<input type="text" id="welshnoun" th:field="*{welshNoun}">		
+		<input type="text" id="welshnoun" th:field="*{welshNoun}"><br>		
+		<th:block th:each="e : ${#fields.errors('welshNoun')}">
+			<span style="color: red"><th:block
+					th:text="${e}"></th:block></span>
+			<br />
+		</th:block>	
 		</div><br>
 		<div>
 		<th:block th:each="g : ${genders}">
 			<label th:text="${g}"></label>
 			<input type="radio" th:field="*{gender}" th:value="${g}"><br>
+			<th:block th:each="e : ${#fields.errors('gender')}">
+			<span style="color: red"><th:block
+					th:text="${e}"></th:block></span>
+			<br />
+		</th:block>
 		</th:block>
 		</div><br><br>
 		

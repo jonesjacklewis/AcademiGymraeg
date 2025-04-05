@@ -18,28 +18,28 @@ public class NounConfigurer {
 	void setupSomeNouns() {
 		
 		Noun n = new Noun();
-		n.setEnglishNoun("Aeroplane");
-		n.setWelshNoun("Awyren");
+		n.setEnglishNoun("aeroplane");
+		n.setWelshNoun("awyren");
 		n.setGender(Gender.FEMININE);
 		repo.save(n);
 		
 		n = new Noun();
-		n.setEnglishNoun("Apple");
-		n.setWelshNoun("Afal");
+		n.setEnglishNoun("apple");
+		n.setWelshNoun("afal");
 		n.setGender(Gender.MASCULINE);
 		repo.save(n);
 	
 		
 		n = new Noun();
-		n.setEnglishNoun("Book");
-		n.setWelshNoun("Llyfr");
+		n.setEnglishNoun("book");
+		n.setWelshNoun("llyfr");
 		n.setGender(Gender.MASCULINE);
 		repo.save(n);
 	
 		
 		n = new Noun();
-		n.setEnglishNoun("Business");
-		n.setWelshNoun("Busnes");
+		n.setEnglishNoun("business");
+		n.setWelshNoun("busnes");
 		n.setGender(Gender.MASCULINE);
 		repo.save(n);
 	
