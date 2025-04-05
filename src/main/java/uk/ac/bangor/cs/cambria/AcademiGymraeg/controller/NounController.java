@@ -47,6 +47,8 @@ public class NounController {
 	// on the New Noun form.
 	// All existing noun objects are also passed in as a List, to display in the All
 	// Nouns table.
+	// If an action was just performed (add, edit or delete noun), then a confirmation message will also be added to
+	// the returned html page.
 	@GetMapping
 	public String nounAdminPage(Model m) {
 
@@ -77,9 +79,10 @@ public class NounController {
 		return "nounadmin";
 	}
 
-	// POST requests to "/noun". Handles validating entry into the New Noun form,
-	// before creating a
-	// new Noun entry in the data store
+	// POST requests to "/noun". Handles returning the page (with the existing Noun object) if the inputed data was invalid.
+	// If the data was valid, the values are converted to lowercase and saved to the data store.
+	// The "add" confirmation message is also updated, to display when the nounadmin.html page is
+	// redirected to
 	@PostMapping
 	public String newNoun(@Valid Noun n, BindingResult result, Model m)  {
 
@@ -104,6 +107,8 @@ public class NounController {
 
 	// GET requests to "/noun/deletenoun/{nounID}. Handles deleting a requested Noun
 	// from the data store.
+	// The "delete" confirmation message is also updated, to display when the nounadmin.html page is
+	// redirected to
 	@GetMapping("/deletenoun/{id}")
 	public String deletenoun(@PathVariable("id") Long id) {
 		Noun nounToDelete = repo.findById(id).get();
@@ -113,7 +118,9 @@ public class NounController {
 	}
 
 	// POST requests to "/noun/editnoun". Handles editing an existing Noun in the
-	// data store
+	// data store. Returns the page and the existing Noun object if the inputed values where invalid.
+	// The "edit" confirmation message is also updated, to display when the nounadmin.html page is
+	// redirected to.
 	@PostMapping("/editnoun")
 	public String editnoun(@Valid Noun noun, BindingResult result, Model m) {
 
