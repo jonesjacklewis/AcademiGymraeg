@@ -9,8 +9,8 @@
 <body>
     <h1>Noun Admin</h1>
 	
-	<h2>Add a new Noun</h2>
-	<form th:action="@{/noun}" method="POST" th:object="${noun}">
+	<h2>Edit Noun</h2>
+	<form th:action="@{/editnoun}" method="POST" th:object="${noun}">
 		<div>
 		<label for="englishnoun">English noun: </label>
 		<input type="text" id="englishnoun" th:field="*{englishNoun}"><br>
@@ -24,30 +24,11 @@
 		</th:block>
 		</div><br><br>
 		
-		<button type="submit">Create Noun</button>
+		<button type="submit">Save changes</button>
 	</form>
 	
 	
-	<br>
-	<h2>All Nouns</h2>
-	<div>
-		<table>
-		 <tr>
-    		<th>English</th>
-    		<th>Welsh</th>
-    		<th>Gender</th>
-    		<th>Action</th>
-  		</tr>
-		<tr th:each="n : ${allnouns}">
-			<th th:text="${n.englishNoun}"></th>
-			<th th:text="${n.welshNoun}"></th>
-			<th th:text="${n.gender}"></th>
-			<th><a th:href="@{/editnoun/{id}(id = ${n.id})}">EDIT</a></th>
-			<th><a th:href="@{/noun/deletenoun/{id}(id = ${n.id})}">DELETE</a></th>
-		</tr>
-		</table>
-	</div>
 	
-	<a href="/logout">Log Out </a>
+	<a href="/noun">Cancel </a>
 </body>
 </html>

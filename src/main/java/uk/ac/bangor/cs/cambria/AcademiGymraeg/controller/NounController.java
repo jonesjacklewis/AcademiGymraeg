@@ -2,6 +2,7 @@ package uk.ac.bangor.cs.cambria.AcademiGymraeg.controller;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -69,5 +70,38 @@ public class NounController {
 		  repo.deleteById(id);
 		  return "redirect:/noun";
 	  }
+	  
+	  @GetMapping("/editnoun/{id}1")
+	  public String editnoun(@PathVariable("id") Long id) throws Exception {
+		  
+		  Noun editedNoun = repo.findById(id).get();
+		  
+		  //Validate what has been entered - alphabet only, lowercase, no spaces
+		  
+		  String regex = "([a-z])\\w*([^A-Z])*";
+		  
+		  if(!editedNoun.getEnglishNoun().matches(regex))
+		  {
+			  throw new Exception("Invalid input for English noun. Only lowercase letters allowed");
+		  }
+		  else if(!editedNoun.getWelshNoun().matches(regex))
+		  {
+			  throw new Exception("Invalid input for Welsh noun. Only lowercase letters allowed");
+		  }
+		  
+		  repo.save(editedNoun);
+		  
+		  return "redirect:/noun";
+	  
+	  }
+	  
+	  @GetMapping("/editnoun/{id}")
+		public String nounEditPage(@PathVariable("id") Long id, Model m) {
+			m.addAttribute("noun", repo.findById(id).get());
+			
+			m.addAttribute("genders", genders);
+			
+			return "nounedit";
+		}
 	 
 }
