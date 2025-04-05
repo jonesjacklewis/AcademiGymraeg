@@ -42,8 +42,8 @@
 			<th th:text="${n.englishNoun}"></th>
 			<th th:text="${n.welshNoun}"></th>
 			<th th:text="${n.gender}"></th>
-			<th><a th:href="@{/editnoun/{id}(id = ${n.id})}">EDIT</a></th>
-			<th><a th:href="@{/noun/deletenoun/{id}(id = ${n.id})}">DELETE</a></th>
+			<th><a th:href="@{noun/editnoun/{id}(id = ${n.id})}">EDIT</a>
+			<a th:href="@{/noun/deletenoun/{id}(id = ${n.id})}">DELETE</a></th>
 		</tr>
 		</table>
 	</div>
