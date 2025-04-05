@@ -109,4 +109,10 @@ public class Noun  {
 		return id;
 	}
 	
+	@Override
+	public String toString()
+	{
+		return this.welshNoun + " | " + this.englishNoun;
+	}
+	
 }

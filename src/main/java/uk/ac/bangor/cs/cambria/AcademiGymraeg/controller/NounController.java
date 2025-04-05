@@ -28,14 +28,18 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.NounRepository;
 @Controller
 @RequestMapping("/noun")
 public class NounController {
-
-	// TODO - Add error handling
-	// TODO - Add confirmation messages for additions, changes or deletions
+	
 
 	@Autowired
 	private NounRepository repo;
 
 	private List<Gender> genders = Arrays.asList(Gender.values());
+	
+	public static String addConfirmationMessage = "";
+	
+	public static String editConfirmationMessage = "";
+	
+	public static String deleteConfirmationMessage = "";
 
 	// GET requests to "/noun" (Initial request) - new Noun object is passed in,
 	// in preparation to adding a new noun to the data store.
@@ -48,7 +52,24 @@ public class NounController {
 
 		if (!m.containsAttribute("noun"))
 			m.addAttribute("noun", new Noun());
-
+		
+		if(!addConfirmationMessage.isBlank())
+		{
+			m.addAttribute("addconfirmationmessage", addConfirmationMessage);
+			addConfirmationMessage = "";
+		}
+		else if(!editConfirmationMessage.isBlank())
+		{
+			m.addAttribute("editconfirmationmessage", editConfirmationMessage);
+			editConfirmationMessage = "";
+		}
+		else if(!deleteConfirmationMessage.isBlank())
+		{
+			m.addAttribute("deleteconfirmationmessage", deleteConfirmationMessage);
+			deleteConfirmationMessage = "";
+		}
+		
+		
 		m.addAttribute("genders", genders);
 
 		m.addAttribute("allnouns", repo.findAll());
@@ -64,6 +85,7 @@ public class NounController {
 
 		if (result.hasErrors()) {
 			m.addAttribute("noun", n);
+			return nounAdminPage(m);
 		} else {
 
 			
@@ -71,11 +93,12 @@ public class NounController {
 			n.setEnglishNoun(n.getEnglishNoun().toLowerCase());
 			n.setWelshNoun(n.getWelshNoun().toLowerCase());
 
-			repo.save(n);
-			m.addAttribute("noun", new Noun());
+			repo.save(n);			
+			addConfirmationMessage = "New noun '"+ n.getWelshNoun() + " | " + n.getEnglishNoun() + "' added.";
+			return "redirect:/noun";
 		}
 		
-		return nounAdminPage(m);
+		
 
 	}
 
@@ -83,6 +106,8 @@ public class NounController {
 	// from the data store.
 	@GetMapping("/deletenoun/{id}")
 	public String deletenoun(@PathVariable("id") Long id) {
+		Noun nounToDelete = repo.findById(id).get();
+		deleteConfirmationMessage = "Noun '" + nounToDelete.getWelshNoun() + " | " + nounToDelete.getEnglishNoun() + "' was deleted.";
 		repo.deleteById(id);
 		return "redirect:/noun";
 	}
@@ -97,11 +122,17 @@ public class NounController {
 			return nounEditPage(noun.getId(), m);
 		} else {
 			
+			Noun originalNoun = repo.findById(noun.getId()).get();
+			
 			// Convert to lowercase
 			noun.setEnglishNoun(noun.getEnglishNoun().toLowerCase());
 			noun.setWelshNoun(noun.getWelshNoun().toLowerCase());
 
 			repo.save(noun);
+			
+			editConfirmationMessage = "Changes to noun were saved.";
+			
+			m.addAttribute("noun", new Noun());
 
 			return "redirect:/noun";
 		}
@@ -116,7 +147,7 @@ public class NounController {
 
 		if (!m.containsAttribute("noun"))
 			m.addAttribute("noun", repo.findById(id).get());
-
+		
 		m.addAttribute("genders", genders);
 
 		return "nounedit";

@@ -42,9 +42,16 @@
 		<button type="submit">Create Noun</button>
 	</form>
 	
-	
+	<span style="color: green">
+		<th:block th:text="${addconfirmationmessage} ?: ''"></th:block>
+		<th:block th:text="${editconfirmationmessage} ?: ''"></th:block>			
+	</span>
+			
+				
 	<br>
 	<h2>All Nouns</h2>
+	<span style="color: green"><th:block th:text="${deleteconfirmationmessage} ?: ''"></th:block>
+			</span>
 	<div>
 		<table>
 		 <tr>
@@ -58,7 +65,7 @@
 			<th th:text="${n.welshNoun}"></th>
 			<th th:text="${n.gender}"></th>
 			<th><a th:href="@{noun/editnoun/{id}(id = ${n.id})}">EDIT</a>
-			<a th:href="@{/noun/deletenoun/{id}(id = ${n.id})}">DELETE</a></th>
+			<a th:href="@{/noun/deletenoun/{id}(id = ${n.id})}" th:data-noun="'Are you sure you wish to delete the noun ' + ${n.toString()} + '?'" th:onclick="return confirm(this.getAttribute('data-noun')) ? true : false;">DELETE</a></th>
 		</tr>
 		</table>
 	</div>
