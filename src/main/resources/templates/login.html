@@ -3,36 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="author" content="jcj23xfb">
+	<meta name="author" content="jcj23xfb, grs22lkc">
+    <link href="../css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
     <title>Academi Gymraeg | Log In</title>
 </head>
 <body>
-    <h1>Home</h1>
-
-    <div id="logInGroup">
-        <form th:action="@{/login}" method="post">
-            <label for="username">Enter your username/email: </label>
-            <input type="text" name="username" id="username" placeholder="Enter your username/email" required><br>
+    <div id="header">
+	    <img id="logo" th:src="@{/images/logo.png}" alt="Academi Gymraeg Logo">
+	    
+	</div>
+	
+	<div id="container">
+		<div id="welcome-container">
+			<img id="dragon" th:src="@{/images/dragon.png}" alt="Image of cartoon style dragon">
+			<div id="welcome">
+				<p>Welcome!</p>
+				
+				<h2>Log In</h2>
+				
+				<div id="logInGroup">
+			        <form th:action="@{/login}" method="post">
+			            <label for="username">Email:</label><br>
+			            <input type="text" name="username" id="username" placeholder="Enter your username/email" required><br>
+			            
+			            <label for="password">Password:</label><br>
+			            <input type="password" name="password" id="password" placeholder="Enter your password" required><br>
+			    
+			            <button type="submit">Log In</button>
+			        </form>
+			
+			        <button id="forgotPasswordBtn">Forgot Password</button>
+			    </div>
+			
+			    
+			    <script>
+					
+					const forgotPasswordBtn = document.querySelector("#forgotPasswordBtn");
+					
+					forgotPasswordBtn.addEventListener("click", () => {
+						alert("Please contact the system administrator to reset your password.");
+					});
+					
+			       
+			    </script>
+				
+				
+			</div>
+		</div>
+	</div>
+	
+	
     
-            <label for="password">Enter your password: </label>
-            <input type="password" name="password" id="password" placeholder="Enter your password" required><br>
-    
-            <button type="submit">Log In</button>
-        </form>
-
-        <button id="forgotPasswordBtn">Forgot Password</button>
-    </div>
-
-    
-    <script>
-		
-		const forgotPasswordBtn = document.querySelector("#forgotPasswordBtn");
-		
-		forgotPasswordBtn.addEventListener("click", () => {
-			alert("Please contact the system administrator to reset your password.");
-		});
-		
-       
-    </script>
 </body>
 </html>

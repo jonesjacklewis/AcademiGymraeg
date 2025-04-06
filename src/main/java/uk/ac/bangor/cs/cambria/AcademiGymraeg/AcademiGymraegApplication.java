@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,10 +21,17 @@ public class AcademiGymraegApplication {
 	@Autowired
 	private UserDetailsService userDetailsService;
 
+	
 	public static void main(String[] args) {
 		SpringApplication.run(AcademiGymraegApplication.class, args);
 	}
 
+	/** grs22lkc added this bean to allow retrieval of static files when user not logged in **/
+	@Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers("/css/**", "/js/**", "/images/**");
+    }
+	
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.userDetailsService(userDetailsService)
