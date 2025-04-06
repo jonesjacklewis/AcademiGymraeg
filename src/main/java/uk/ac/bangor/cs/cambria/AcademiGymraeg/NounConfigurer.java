@@ -17,31 +17,21 @@ public class NounConfigurer {
 	@PostConstruct
 	void setupSomeNouns() {
 		
-		Noun n = new Noun();
-		n.setEnglishNoun("Aeroplane");
-		n.setWelshNoun("Awyren");
-		n.setGender(Gender.FEMININE);
-		repo.save(n);
-		
-		n = new Noun();
-		n.setEnglishNoun("Apple");
-		n.setWelshNoun("Afal");
-		n.setGender(Gender.MASCULINE);
-		repo.save(n);
-	
-		
-		n = new Noun();
-		n.setEnglishNoun("Book");
-		n.setWelshNoun("Llyfr");
-		n.setGender(Gender.MASCULINE);
-		repo.save(n);
-	
-		
-		n = new Noun();
-		n.setEnglishNoun("Business");
-		n.setWelshNoun("Busnes");
-		n.setGender(Gender.MASCULINE);
-		repo.save(n);
+		/*
+		 * Noun n = new Noun(); n.setEnglishNoun("aeroplane"); n.setWelshNoun("awyren");
+		 * n.setGender(Gender.FEMININE); repo.save(n);
+		 * 
+		 * n = new Noun(); n.setEnglishNoun("apple"); n.setWelshNoun("afal");
+		 * n.setGender(Gender.MASCULINE); repo.save(n);
+		 * 
+		 * 
+		 * n = new Noun(); n.setEnglishNoun("book"); n.setWelshNoun("llyfr");
+		 * n.setGender(Gender.MASCULINE); repo.save(n);
+		 * 
+		 * 
+		 * n = new Noun(); n.setEnglishNoun("business"); n.setWelshNoun("busnes");
+		 * n.setGender(Gender.MASCULINE); repo.save(n);
+		 */
 	
 		
 	}
