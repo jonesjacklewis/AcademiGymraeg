@@ -2,6 +2,9 @@ package uk.ac.bangor.cs.cambria.AcademiGymraeg.util;
 
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.UserRepository;
 
+/**
+ * @author jcj23xfb
+ */
 public class ValidatorService {
 
 	private final UserRepository userRepository;
