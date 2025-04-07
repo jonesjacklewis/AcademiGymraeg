@@ -2,6 +2,7 @@ package uk.ac.bangor.cs.cambria.AcademiGymraeg.controller;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,7 +19,7 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.Noun;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.NounRepository;
 
 /**
- * @author ptg22svs
+ * @author ptg22svs, cnb22xdk
  */
 
 /**
@@ -152,8 +153,18 @@ public class NounController {
 	@GetMapping("/editnoun/{id}")
 	public String nounEditPage(@PathVariable("id") Long id, Model m) {
 
+		
+		// Checks to see if ID is a valid value.
+		// If not, redirects to /noun.
+		// If yes, driects to /noun/nounedit{nounID}.
+		Optional<Noun> nounOptional = repo.findById(id);
+		
+		if(nounOptional.isEmpty()) {
+			return "redirect:/noun";
+		}		
+		
 		if (!m.containsAttribute("noun"))
-			m.addAttribute("noun", repo.findById(id).get());
+			m.addAttribute("noun", nounOptional.get());
 		
 		m.addAttribute("genders", genders);
 
