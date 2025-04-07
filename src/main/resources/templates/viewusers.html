@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="thh21bgf">
+<title>Academi Gymraeg | View Users</title>
+</head>
+<body>
+	<h2>All Nouns</h2>
+
+	<div>
+		<table>
+			<tr>
+				<th>User ID</th>
+				<th>Email</th>
+				<th>Forename</th>
+			</tr>
+			<tr th:each="u : ${allusers}">
+				<th th:text="${u.userId}"></th>
+				<th th:text="${u.username}"></th>
+				<th th:text="${u.forename}"></th>
+			</tr>
+		</table>
+		
+		<a href="/home">Back</a>
+		
+	</div>
+
+</body>
+</html>
