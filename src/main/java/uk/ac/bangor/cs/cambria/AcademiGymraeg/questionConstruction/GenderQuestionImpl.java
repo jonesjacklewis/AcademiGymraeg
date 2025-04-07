@@ -3,6 +3,7 @@ package uk.ac.bangor.cs.cambria.AcademiGymraeg.questionConstruction;
 import org.springframework.stereotype.Component;
 
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.QuestionConstruction;
+import uk.ac.bangor.cs.cambria.AcademiGymraeg.enums.QuestionType;
 
 /**
  * @author cnb22xdk
@@ -23,7 +24,15 @@ public class GenderQuestionImpl implements QuestionConstruction {
 	 * Sets the appropriate enumeration value
 	 */
 	@Override
-	public String getQuestionType() {
+	public QuestionType getQuestionType() {
+		return QuestionType.GENDER;
+	}
+	
+	/**
+	 * Sets the text of the enumeration value
+	 */
+	@Override
+	public String getQuestionTypeString() {
 		return "GENDER";
 	}
 
