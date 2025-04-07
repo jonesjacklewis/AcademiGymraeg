@@ -51,14 +51,14 @@ public class NounConfigurer {
 			CSVParser parser = format.parse(reader);
 
 			for (CSVRecord record : parser) {
-				String english = record.get("English");
-				String welsh = record.get("Welsh");
-				String genderStr = record.get("Gender");
+				String english = record.get("English").toLowerCase();
+				String welsh = record.get("Welsh").toLowerCase();
+				String genderStr = record.get("Gender").toUpperCase();
 
 				Gender gender;
 
 				try {
-					gender = Gender.valueOf(genderStr.toUpperCase());
+					gender = Gender.valueOf(genderStr);
 				} catch (IllegalArgumentException ex) {
 					logger.warn("Unknown gender '{}'. Skipping record: {}", genderStr, record);
 					continue;
