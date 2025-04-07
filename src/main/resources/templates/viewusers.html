@@ -20,6 +20,8 @@
 				<th th:text="${u.userId}"></th>
 				<th th:text="${u.username}"></th>
 				<th th:text="${u.forename}"></th>
+				<th><a th:href="@{edituser/{id}(id = ${u.userId})}">EDIT</a>
+				<a th:href="@{/deleteuser/{id}(id = ${u.userId})}" th:data-user="'Are you sure you wish to delete the user ' + ${u.username} + '?'" th:onclick="return confirm(this.getAttribute('data-user')) ? true : false;">DELETE</a></th>
 			</tr>
 		</table>
 		
