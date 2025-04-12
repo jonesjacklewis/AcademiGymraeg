@@ -1,4 +1,4 @@
-/* Author: grs22lkc */
+/* Author: grs22lkc, cnb22xdk */
 
 body {
 	margin: 0px 0px 0px 0px;
@@ -45,11 +45,16 @@ body {
 	padding: 50px 50px 50px 50px;
 }
 
+h1 {
+	
+}
+
+
 h2 {
 	
 }
 
-#welcome-container {
+#welcome-container, #error-container {
 	display: flex;
 	justify-content: space-around;
   	flex-direction: row;
@@ -68,7 +73,7 @@ h2 {
 	width: 600px;
 }
 
-#welcome a {
+#welcome a, #errorpage a {
 	color: white;
 	background-color: green;
 	width: 200px;
@@ -76,6 +81,28 @@ h2 {
 	font-size: 25px;
 	padding: 8px 48px 8px 48px;
 	text-decoration: none;
+}
+
+#errorpage h1, h2, p {
+	width: 600px;
+}
+
+#errorpage h1 {
+	color: red;
+	font-size: 72px;
+	font-weight: bold;
+	margin-top: 50px;
+}
+
+#errorpage h2 {
+	color: red;
+	font-size: 40px;
+	font-weight: bold;
+}
+
+#errorpage p {
+	font-size: 20px;
+	margin-bottom: 50px;
 }
 
 #logInGroup input {

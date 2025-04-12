@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="cnb22xdk">
+	<link href="../css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
+    <title>ERROR | Academi Gymraeg</title>
+</head>
+<body>
+    <div id="header">
+	    <img id="logo" th:src="@{/images/logo.png}" alt="Academi Gymraeg Logo">
+	    <a href="/logout" id="logout">Log Out </a>
+	</div>
+	<div id="nav-bar">
+		<a href="/home" id="nav-link-home" th:style="'color: red; background-color: white'">Welcome</a>
+		<a href="/test" id="nav-link-test">Take Test</a>
+		<a href="/results" id="nav-link-results">Results</a>
+		<a href="/nounsadmin" id="nav-link-nouns">Nouns</a>
+		<a href="/viewusers" id="nav-link-viewusers">View Users</a>
+    <a href="/noun" id="nav-link-nouns">Noun Admin</a>
+		<a href="/addUser" id="nav-link-users">Users</a>		
+	</div>
+	
+	<div id="container">
+		<div id="error-container">
+			<div id="errorpage">
+				<h1>:(</h1>
+				<h2>ERROR 404</h2>
+				<p>The requested page was not found on the server.</p>
+				<a href="/home" id="home-button">Return Home</a>
+			</div>
+		</div>
+	</div>	
+</body>
+</html>
