@@ -36,7 +36,7 @@ public class AddUserController {
 		user.setInstructor(instructor);
 		repo.save(user);
 		model.addAttribute("message", "User added successfully!");
-		return "redirect:/add-user";
+		return "redirect:/addUser";
 	}
 
 }
