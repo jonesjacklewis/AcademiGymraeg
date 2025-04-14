@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="ptg22svs">
+    <title>Academi Gymraeg | Edit User</title>
+</head>
+<body>
+    <h1>User Admin</h1>
+	
+	<h2>Edit User</h2>
+	<form th:action="@{/edituser}" method="POST" th:object="${user}">
+	<input type="hidden" id="id" th:field="*{userId}"><br>
+		<div>
+		<label for="forename">Forename: </label>
+		<input type="text" id="forename" th:field="*{forename}"><br>		
+		<th:block th:each="e : ${#fields.errors('forename')}">
+			<span style="color: red"><th:block
+					th:text="${e}"></th:block></span>
+			<br />
+		</th:block>	
+		<label for="emailaddress">Email Address: </label>
+		<input type="text" id="emailaddress" th:field="*{username}"><br>
+		<th:block th:each="e : ${#fields.errors('username')}">
+			<span style="color: red"><th:block
+					th:text="${e}"></th:block></span>
+			<br />
+		</th:block>		
+		</div><br>
+		<div>
+		<label>
+        	<input type="checkbox" th:checked="*{admin}"/> Administrator
+    	</label><br>
+    	<label>
+        	<input type="checkbox" th:checked="*{instructor}"/> Instructor
+    	</label><br>
+		<label for="password">Password: </label>
+		<input type="password" id="password" th:field="*{password}"><br>
+		<label for="password">Confirm password: </label>
+		<input type="password" id="confirmpassword" th:field="*{password}"><br>
+		<th:block th:each="e : ${#fields.errors('password')}">
+			<span style="color: red"><th:block
+					th:text="${e}"></th:block></span>
+			<br />
+		</th:block>		
+
+		</div><br><br>
+		
+		<button type="submit">Save changes</button>
+	</form>
+	
+		
+	
+	<a href="/user">Cancel </a>
+</body>
+</html>
