@@ -18,10 +18,19 @@ public class ViewUsersController {
 
 	@Autowired
 	private UserRepository repo;
+	
+	public static String editConfirmationMessage = "";
 
 	@GetMapping
 	public String viewUsers(Model m) {
 		m.addAttribute("allusers", repo.findAll());
+		
+		if(!editConfirmationMessage.isBlank())
+		{
+			m.addAttribute("editconfirmationmessage", editConfirmationMessage);
+			editConfirmationMessage = "";
+		}
+		
 		return "viewusers";
 	}
 

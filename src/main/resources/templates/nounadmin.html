@@ -68,8 +68,10 @@
 			<a th:href="@{/noun/deletenoun/{id}(id = ${n.id})}" th:data-noun="'Are you sure you wish to delete the noun ' + ${n.toString()} + '?'" th:onclick="return confirm(this.getAttribute('data-noun')) ? true : false;">DELETE</a></th>
 		</tr>
 		</table>
+	</div><br>
+	<div>
+		<a href="/home">Back></a>
+		<a href="/logout">Log Out </a>
 	</div>
-	
-	<a href="/logout">Log Out </a>
 </body>
 </html>
