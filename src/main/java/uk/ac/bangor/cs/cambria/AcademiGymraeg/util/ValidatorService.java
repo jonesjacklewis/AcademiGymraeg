@@ -1,10 +1,13 @@
 package uk.ac.bangor.cs.cambria.AcademiGymraeg.util;
 
+import org.springframework.stereotype.Service;
+
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.UserRepository;
 
 /**
  * @author jcj23xfb
  */
+@Service
 public class ValidatorService {
 
 	private final UserRepository userRepository;

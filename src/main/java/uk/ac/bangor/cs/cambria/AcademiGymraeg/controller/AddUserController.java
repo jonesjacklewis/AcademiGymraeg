@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.User;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.UserRepository;
+import uk.ac.bangor.cs.cambria.AcademiGymraeg.util.ValidatorService;
 
 /**
  * @author grs22lkc
@@ -21,22 +22,44 @@ public class AddUserController {
 	@Autowired
 	private UserRepository repo;
 
+	@Autowired
+	private ValidatorService validator;
+
+	public static String addConfirmationMessage = "";
+	public static String addErrorMessage = "";
+
 	@GetMapping("/addUser")
-	public String addUserPage() {
+	public String addUserPage(Model m) {
+
+		if (!addConfirmationMessage.isBlank()) {
+			m.addAttribute("addconfirmationmessage", addConfirmationMessage);
+			addConfirmationMessage = "";
+		}
+
+		if (!addErrorMessage.isBlank()) {
+			m.addAttribute("addErrorMessage", addErrorMessage);
+			addErrorMessage = "";
+		}
+
 		return "add-user";
 	}
-
 
 	@PostMapping("/addUser")
 	public String addUser(@ModelAttribute User user,
 			@RequestParam(value = "admin", required = false, defaultValue = "false") boolean admin,
 			@RequestParam(value = "instructor", required = false, defaultValue = "false") boolean instructor,
 			Model model) {
+
+		if (!(validator.isValidEmail(user.getUsername()) && validator.isValidPassword(user.getPassword()))) {
+			addErrorMessage = "Unable to add user";
+			return "redirect:/addUser";
+		}
+
 		user.setAdmin(admin);
 		user.setInstructor(instructor);
 		repo.save(user);
-		model.addAttribute("message", "User added successfully!");
-		return "redirect:/add-user";
+		addConfirmationMessage = "User successfully added";
+		return "redirect:/addUser";
 	}
 
 }
