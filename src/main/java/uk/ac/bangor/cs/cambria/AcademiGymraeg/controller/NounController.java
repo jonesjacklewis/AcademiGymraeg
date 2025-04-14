@@ -43,7 +43,7 @@ public class NounController {
 	public static String deleteConfirmationMessage = "";
 
 	// GET requests to "/noun" (Initial request) - new Noun object is passed in,
-	// in preparation to adding a new noun to the data store.
+	// in preparation for adding a new noun to the data store.
 	// All GENDER enum values are also passed in, to display as radio button options
 	// on the New Noun form.
 	// All existing noun objects are also passed in as a List, to display in the All
