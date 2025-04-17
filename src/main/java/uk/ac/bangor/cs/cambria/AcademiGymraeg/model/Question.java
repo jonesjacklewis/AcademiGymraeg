@@ -5,7 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
+import uk.ac.bangor.cs.cambria.AcademiGymraeg.QuestionConstruction;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.enums.QuestionType;
+import uk.ac.bangor.cs.cambria.AcademiGymraeg.questionConstruction.EnglishQuestionImpl;
+import uk.ac.bangor.cs.cambria.AcademiGymraeg.questionConstruction.GenderQuestionImpl;
+import uk.ac.bangor.cs.cambria.AcademiGymraeg.questionConstruction.WelshQuestionImpl;
 
 /**
  * @author dwp22pzv
@@ -19,13 +23,37 @@ public class Question {
 
 	}
 
-	public Question( @NotBlank String questionString, @NotBlank Noun noun,
-			@NotBlank QuestionType questionType, @NotBlank String correctAnswer, Test test) {
-		this.questionString = questionString;
+	public Question(  @NotBlank Noun noun, @NotBlank QuestionType questionType,  Test test) {
 		this.noun = noun;
 		this.questionType = questionType;
-		this.correctAnswer = correctAnswer;
 		this.test = test;
+
+		generateQuestion();
+	}
+	
+	private void generateQuestion(){
+
+		QuestionConstruction questionConstructor;
+
+            switch (this.questionType){
+                case WELSH_TO_ENGLISH ->  {
+                     questionConstructor = new EnglishQuestionImpl();
+                     this.correctAnswer = noun.getEnglishNoun();
+                    }
+                case ENGLISH_TO_WELSH ->  {
+                    questionConstructor = new WelshQuestionImpl();
+                    this.correctAnswer = noun.getWelshNoun();
+                }
+                case GENDER ->  {
+                     questionConstructor = new GenderQuestionImpl();
+                     this.correctAnswer = noun.getGender().name();
+                    }
+                default -> {
+                     throw new IllegalArgumentException("Unrecognised question type " + this.questionType);
+                    }
+            }
+
+		this.questionString = questionConstructor.constructQuestion(this.noun.toString());
 	}
 
 	/**
