@@ -39,6 +39,8 @@ public class Question {
 	@NotBlank
 	private Long id;
 
+	
+
 	/**
 	 * Question attribute. The string containing the actual question being asked.
 	 */
@@ -80,5 +82,39 @@ public class Question {
 	public String toString() {
 		return questionString;
 	}
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getQuestionString() {
+        return questionString;
+    }
+
+    public Noun getNoun() {
+        return noun;
+    }
+
+    public QuestionType getQuestionType() {
+        return questionType;
+    }
+
+    public String getCorrectAnswer() {
+        return correctAnswer;
+    }
+
+    public String getGivenAnswer() {
+        return givenAnswer;
+    }
+
+    public Test getTest() {
+        return test;
+    }
+
+    public void setGivenAnswer(String givenAnswer) {
+        this.givenAnswer = givenAnswer;
+    }
+
+
 
 }
