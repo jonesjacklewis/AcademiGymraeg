@@ -41,6 +41,14 @@
 		
 		            <button type="submit">Register User</button>
 		        </form>
+				
+				<p th:if="${addconfirmationmessage != null and !addconfirmationmessage.isEmpty()}" 
+				   th:text="${addconfirmationmessage}" 
+				   style="color: green;"></p>
+				   
+				   <p th:if="${addErrorMessage != null and !addErrorMessage.isEmpty()}" 
+				      th:text="${addErrorMessage}" 
+				      style="color: red;"></p>
 		
 		
 		    </div>

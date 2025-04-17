@@ -1,5 +1,7 @@
 package uk.ac.bangor.cs.cambria.AcademiGymraeg.model;
 
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -8,6 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 
@@ -41,9 +45,32 @@ public class Test {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long testId;
 
+	@ManyToOne
 	@NotNull
-	@Column(nullable = false, updatable = false)
+	@JoinColumn(nullable = false, updatable = false)
 	private User user;
+
+	public Test() {
+	}
+
+	public Test(@NotNull User user, @NotNull ZonedDateTime startDateTime, @NotNull int numberOfQuestions) {
+		this.user = user;
+		this.startDateTime = startDateTime;
+		this.numberOfQuestions = numberOfQuestions;
+
+		this.endDateTime = ZonedDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC);
+		this.numberCorrect = 0;
+	}
+
+	public Test(@NotNull User user, @NotNull ZonedDateTime startDateTime, @NotNull ZonedDateTime endDateTime,
+			@NotNull int numberCorrect, @NotNull int numberOfQuestions) {
+		this.user = user;
+		this.startDateTime = startDateTime;
+		this.numberOfQuestions = numberOfQuestions;
+
+		this.endDateTime = endDateTime;
+		this.numberCorrect = numberCorrect;
+	}
 
 	public ZonedDateTime getEndDateTime() {
 		return endDateTime;

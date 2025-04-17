@@ -14,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.User;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.UserRepository;
 
-@SpringBootTest
 class ValidatorServiceTests {
 
 	private final UserRepository userRepository = mock(UserRepository.class);
