@@ -18,15 +18,13 @@ public class QuestionConfigurer {
     @Autowired
     private QuestionRepository repo;
 
-    public QuestionConfigurer(){}
-
     /*
      * For a given list of nouns, generate questions with an evenly split selection of question types.
      * Parameters: 
      *  List<Noun> nouns: A list of noun objects from which to derive questions
      *  Test test: the test object these questions should be associated with.
      */
-    public QuestionConfigurer(List<Noun> nouns, Test test){
+    public void configureQuestion(List<Noun> nouns, Test test){
 
         int i = 0;
 
@@ -51,7 +49,7 @@ public class QuestionConfigurer {
      *  Test test: the test object these questions should be associated with.
      *  QuestionType questionType: a questionType enum which all generated questions will use.
      */
-    public QuestionConfigurer(List<Noun> nouns, Test test, QuestionType questionType){
+    public void configureQuestion(List<Noun> nouns, Test test, QuestionType questionType){
 
         for (Noun noun : nouns){
 

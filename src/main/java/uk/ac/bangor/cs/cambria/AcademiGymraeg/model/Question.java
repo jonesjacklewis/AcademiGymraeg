@@ -70,8 +70,6 @@ public class Question {
 	@NotBlank
 	private Long id;
 
-	
-
 	/**
 	 * Question attribute. The string containing the actual question being asked.
 	 */
