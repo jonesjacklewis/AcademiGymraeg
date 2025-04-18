@@ -36,4 +36,38 @@ public class FirstUserConfigurer {
 
 		repo.save(u);
 	}
+
+	@PostConstruct
+	void setupSecondUser() {
+		if (!repo.findByEmailAddress("instructor@academigymraeg.com").isEmpty()) {
+			return;
+		}
+
+		User u = new User();
+
+		u.setAdmin(false);
+		u.setInstructor(true);
+		u.setPassword(encoder.encode("password456!"));
+		u.setForename("instructor");
+		u.setUsername("instructor@academigymraeg.com");
+
+		repo.save(u);
+	}
+
+	@PostConstruct
+	void setupThirdUser() {
+		if (!repo.findByEmailAddress("student1@academigymraeg.com").isEmpty()) {
+			return;
+		}
+
+		User u = new User();
+
+		u.setAdmin(false);
+		u.setInstructor(false);
+		u.setPassword(encoder.encode("password789!"));
+		u.setForename("student1");
+		u.setUsername("student1@academigymraeg.com");
+
+		repo.save(u);
+	}
 }

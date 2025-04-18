@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,11 +15,9 @@
 	<div id="nav-bar">
 		<a href="/home" id="nav-link-home" th:style="'color: red; background-color: white'">Welcome</a>
 		<a href="/test" id="nav-link-test">Take Test</a>
-		<a href="/results" id="nav-link-results">Results</a>
-		<a href="/nounsadmin" id="nav-link-nouns">Nouns</a>
+		<a href="/addUser" id="nav-link-users">Add User</a>	
 		<a href="/viewusers" id="nav-link-viewusers">View Users</a>
-    <a href="/noun" id="nav-link-nouns">Noun Admin</a>
-		<a href="/addUser" id="nav-link-users">Users</a>		
+    	<a href="/noun" id="nav-link-nouns">Noun Admin</a>	
 		<a href="/viewResults" id="nav-link-users">View Results</a>	
 	</div>
 	
@@ -27,7 +25,7 @@
 		<div id="welcome-container">
 			<img id="dragon" th:src="@{/images/dragon.png}" alt="Image of cartoon style dragon">
 			<div id="welcome">
-				<p>Welcome FORENAME!</p>
+				<p>Welcome <th:block th:text="${currentuser}"></th:block></p>
 				<a href="/test" id="take-test-button">Take Test</a>
 			</div>
 		</div>

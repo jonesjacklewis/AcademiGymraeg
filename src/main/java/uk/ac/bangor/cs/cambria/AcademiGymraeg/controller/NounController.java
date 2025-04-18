@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -51,6 +52,7 @@ public class NounController {
 	// If an action was just performed (add, edit or delete noun), then a confirmation message will also be added to
 	// the returned html page.
 	@GetMapping
+	@PreAuthorize("hasRole('INSTRUCTOR')" + " or hasRole('ADMIN')")
 	public String nounAdminPage(Model m) {
 
 		if (!m.containsAttribute("noun"))
@@ -85,6 +87,7 @@ public class NounController {
 	// The "add" confirmation message is also updated, to display when the nounadmin.html page is
 	// redirected to
 	@PostMapping
+	@PreAuthorize("hasRole('INSTRUCTOR')" + " or hasRole('ADMIN')")
 	public String newNoun(@Valid Noun n, BindingResult result, Model m)  {
 
 		if (result.hasErrors()) {
@@ -111,6 +114,7 @@ public class NounController {
 	// The "delete" confirmation message is also updated, to display when the nounadmin.html page is
 	// redirected to
 	@GetMapping("/deletenoun/{id}")
+	@PreAuthorize("hasRole('INSTRUCTOR')" + " or hasRole('ADMIN')")
 	public String deletenoun(@PathVariable("id") Long id) {
 		Noun nounToDelete = repo.findById(id).get();
 		deleteConfirmationMessage = "Noun '" + nounToDelete.getWelshNoun() + " | " + nounToDelete.getEnglishNoun() + "' was deleted.";
@@ -123,6 +127,7 @@ public class NounController {
 	// The "edit" confirmation message is also updated, to display when the nounadmin.html page is
 	// redirected to.
 	@PostMapping("/editnoun")
+	@PreAuthorize("hasRole('INSTRUCTOR')" + " or hasRole('ADMIN')")
 	public String editnoun(@Valid Noun noun, BindingResult result, Model m) {
 
 		if (result.hasErrors()) {
@@ -151,6 +156,7 @@ public class NounController {
 	// noun by presenting
 	// the "editnoun" page to the user, prepopulated with the existing Noun details.
 	@GetMapping("/editnoun/{id}")
+	@PreAuthorize("hasRole('INSTRUCTOR')" + " or hasRole('ADMIN')")
 	public String nounEditPage(@PathVariable("id") Long id, Model m) {
 
 		
