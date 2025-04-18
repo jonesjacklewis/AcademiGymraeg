@@ -4,6 +4,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.enums.QuestionType;
 
@@ -23,7 +26,7 @@ public class Question {
 	@GeneratedValue
 	@Column(nullable = false, updatable = false)
 	@NotBlank
-	private Long id;
+	private Long questionId;
 
     /**
 	 * Question attribute. The string containing the actual question being asked.
@@ -52,8 +55,8 @@ public class Question {
 	private String _givenAnswer;
 
 
-    public Long getId(){
-        return id;
+    public Long getQuestionId() {
+        return questionId;
     }
 
     public String getQuestionString(){

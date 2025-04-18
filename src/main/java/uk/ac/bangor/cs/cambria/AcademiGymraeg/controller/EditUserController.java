@@ -35,19 +35,17 @@ public class EditUserController {
 	@Autowired
 	private UserRepository repo;
 		
-	@Autowired
+@Autowired
 	private ValidatorService validator;
-
-	// GET requests to "/edituser/{userID}. Handles initial request to edit a
-		// user by presenting
-		// the "useredit" page to the user, prepopulated with the existing User details.
+	/**
+	 * @param id - id of User object to add to the Springboot model
+	 * @param m - Springboot model
+	 * @return string indicating html file to serve
+	 * @apiNote GET requests to "/edituser/{userID}
+	 */
 		@GetMapping("/{id}")
 		public String userEditPage(@PathVariable("id") Long id, Model m) {
 
-		
-		// Checks to see if ID is a valid value.
-		// If not, redirects to /viewusers.
-		// If yes, directs to /useredit}.
 		Optional<User> userOptional = repo.findById(id);
 		
 		if(userOptional.isEmpty()) {
@@ -64,11 +62,13 @@ public class EditUserController {
 	}
 
 
-	// POST requests to "/edituser". Handles editing an existing User in the
-	// data store. Returns the page and the existing Noun object if the inputed values where invalid OR if the inputed
-	// password is blank OR if the password and confirm password boxes do not contain matching values. 
-	// The "edit" confirmation message on the "viewusers" page is also updated, to display when the viewusers.html page is
-	// redirected to.
+		/**
+		 * @param u - User object to edit
+		 * @param result - Form submission result
+		 * @param m - Springboot model
+		 * @return string indicating redirect target
+		 * @apiNote  POST requests to "/edituser"
+		 */
 	@PostMapping
 	public String editUser(@Valid User u,  BindingResult result, Model m)  {
 

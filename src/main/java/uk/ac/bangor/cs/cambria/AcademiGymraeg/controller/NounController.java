@@ -26,7 +26,6 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.NounRepository;
 /**
  * All requests to "/noun" (and subdocs) are handled by this controller
  */
-
 @Controller
 @RequestMapping("/noun")
 public class NounController {
@@ -43,14 +42,12 @@ public class NounController {
 	
 	public static String deleteConfirmationMessage = "";
 
-	// GET requests to "/noun" (Initial request) - new Noun object is passed in,
-	// in preparation for adding a new noun to the data store.
-	// All GENDER enum values are also passed in, to display as radio button options
-	// on the New Noun form.
-	// All existing noun objects are also passed in as a List, to display in the All
-	// Nouns table.
-	// If an action was just performed (add, edit or delete noun), then a confirmation message will also be added to
-	// the returned html page.
+	
+	/**
+	 * @param m - Springboot model
+	 * @return string indicating html file to serve
+	 * @apiNote GET requests to "/noun" (Initial request)
+	 */
 	@GetMapping
 	@PreAuthorize("hasRole('INSTRUCTOR')" + " or hasRole('ADMIN')")
 	public String nounAdminPage(Model m) {
@@ -82,10 +79,14 @@ public class NounController {
 		return "nounadmin";
 	}
 
-	// POST requests to "/noun". Handles returning the page (with the existing Noun object) if the inputed data was invalid.
-	// If the data was valid, the values are converted to lowercase and saved to the data store.
-	// The "add" confirmation message is also updated, to display when the nounadmin.html page is
-	// redirected to
+	
+	/**
+	 * @param n - Noun object to add to the datastore
+	 * @param result - Form submission result
+	 * @param m - Springboot model
+	 * @return string indicating redirect target
+	 * @apiNote POST requests to "/noun"
+	 */
 	@PostMapping
 	@PreAuthorize("hasRole('INSTRUCTOR')" + " or hasRole('ADMIN')")
 	public String newNoun(@Valid Noun n, BindingResult result, Model m)  {
@@ -96,7 +97,7 @@ public class NounController {
 		} else {
 
 			
-			// Convert to lowercase
+	
 			n.setEnglishNoun(n.getEnglishNoun().toLowerCase());
 			n.setWelshNoun(n.getWelshNoun().toLowerCase());
 
@@ -109,10 +110,12 @@ public class NounController {
 
 	}
 
-	// GET requests to "/noun/deletenoun/{nounID}. Handles deleting a requested Noun
-	// from the data store.
-	// The "delete" confirmation message is also updated, to display when the nounadmin.html page is
-	// redirected to
+	
+	/**
+	 * @param id - Id of Noun that will be deleted
+	 * @return string indicating redirect target
+	 * @apiNote GET requests to "/noun/deletenoun/{nounID}
+	 */
 	@GetMapping("/deletenoun/{id}")
 	@PreAuthorize("hasRole('INSTRUCTOR')" + " or hasRole('ADMIN')")
 	public String deletenoun(@PathVariable("id") Long id) {
@@ -122,22 +125,26 @@ public class NounController {
 		return "redirect:/noun";
 	}
 
-	// POST requests to "/noun/editnoun". Handles editing an existing Noun in the
-	// data store. Returns the page and the existing Noun object if the inputed values where invalid.
-	// The "edit" confirmation message is also updated, to display when the nounadmin.html page is
-	// redirected to.
+	
+	/**
+	 * @param noun - Noun object to edit
+	 * @param result - Form submission result
+	 * @param m - Springboot model
+	 * @return string indicating redirect target
+	 * @apiNote  POST requests to "/noun/editnoun"
+	 */
 	@PostMapping("/editnoun")
 	@PreAuthorize("hasRole('INSTRUCTOR')" + " or hasRole('ADMIN')")
 	public String editnoun(@Valid Noun noun, BindingResult result, Model m) {
 
 		if (result.hasErrors()) {
 			m.addAttribute("noun", noun);
-			return nounEditPage(noun.getId(), m);
+			return nounEditPage(noun.getNounId(), m);
 		} else {
 			
-			Noun originalNoun = repo.findById(noun.getId()).get();
+			Noun originalNoun = repo.findById(noun.getNounId()).get();
 			
-			// Convert to lowercase
+			
 			noun.setEnglishNoun(noun.getEnglishNoun().toLowerCase());
 			noun.setWelshNoun(noun.getWelshNoun().toLowerCase());
 
@@ -152,17 +159,18 @@ public class NounController {
 
 	}
 
-	// GET requests to "/noun/editnoun/{nounID}. Handles initial request to edit a
-	// noun by presenting
-	// the "editnoun" page to the user, prepopulated with the existing Noun details.
+
+	/**
+	 * @param id - id of Noun object to add to the Springboot model
+	 * @param m - Springboot model
+	 * @return string indicating html file to serve
+	 * @apiNote GET requests to "/noun/editnoun/{nounID}
+	 */
 	@GetMapping("/editnoun/{id}")
 	@PreAuthorize("hasRole('INSTRUCTOR')" + " or hasRole('ADMIN')")
 	public String nounEditPage(@PathVariable("id") Long id, Model m) {
 
-		
-		// Checks to see if ID is a valid value.
-		// If not, redirects to /noun.
-		// If yes, driects to /noun/nounedit{nounID}.
+	
 		Optional<Noun> nounOptional = repo.findById(id);
 		
 		if(nounOptional.isEmpty()) {
