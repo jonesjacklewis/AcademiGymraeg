@@ -60,7 +60,7 @@ public class Question {
 	}
 
 	public Boolean checkAnswer(){
-		if (this.givenAnswer.isEmpty() | this.givenAnswer.isBlank()){
+		if (this.givenAnswer.isEmpty() || this.givenAnswer.isBlank()){
 			return false;
 		}
 
