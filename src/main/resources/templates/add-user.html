@@ -15,44 +15,44 @@
 	<div id="nav-bar">
 		<a href="/home" id="nav-link-home">Welcome</a>
 		<a href="/test" id="nav-link-test">Take Test</a>
-		<a href="/results" id="nav-link-results">Results</a>
-		<a href="/nounsadmin" id="nav-link-nouns">Nouns</a>
+		<a href="/viewResults" id="nav-link-results">View Results</a>
+		<a href="/viewusers" id="nav-link-viewusers">View Users</a>
+    	<a href="/addUser" id="nav-link-users" th:style="'color: red; background-color: white'">User Admin</a>
     	<a href="/noun" id="nav-link-nouns">Noun Admin</a>
-		<a href="/addUser" id="nav-link-users" th:style="'color: red; background-color: white'">Users</a>		
 	</div>
 	
-	<div id="container1">
-		<div id="add-user-container">
+	<div id="container">
+		
 	
-		    <h1>Add New User</h1>
-		
-		     <div id="addUserGroup">
-		        <form th:action="@{/addUser}" method="post">
-		            <label for="forename">Forename: </label>
-		            <input type="text" name="forename" id="forename" placeholder="Forename" required><br>
-		            <label for="username">Email: </label>
-		            <input type="text" name="username" id="username" placeholder="Email" required><br>
-										
-					<label>Select user role(s):</label>
-					<input type="checkbox" id="admin" name="admin" value="True">Administrator <input type="checkbox" id="instructor" name="instructor" value="True"> Instructor<br>
+		<h1>Add New User</h1>
+			<div id="add-user-container">
+			    <div id="addUserGroup">
+			        <form th:action="@{/addUser}" method="post">
+			            <label for="forename">Forename: </label>
+			            <input type="text" name="forename" id="forename" placeholder="Forename" required><br><br>
+			            <label for="username">Email: </label>
+			            <input type="text" name="username" id="username" placeholder="Email" required><br><br>
+											
+						<label>Select user role(s):</label>
+						<input type="checkbox" id="admin" name="admin" value="True">Administrator <input type="checkbox" id="instructor" name="instructor" value="True"> Instructor<br><br>
+						
+			            <label for="password">Password: </label>
+			            <input type="password" name="password" id="password" placeholder="Password" required><br><br>
+			
+			            <button type="submit">Register User</button>
+			        </form>
 					
-		            <label for="password">Password: </label>
-		            <input type="password" name="password" id="password" placeholder="Password" required><br>
-		
-		            <button type="submit">Register User</button>
-		        </form>
-				
-				<p th:if="${addconfirmationmessage != null and !addconfirmationmessage.isEmpty()}" 
-				   th:text="${addconfirmationmessage}" 
-				   style="color: green;"></p>
-				   
-				   <p th:if="${addErrorMessage != null and !addErrorMessage.isEmpty()}" 
-				      th:text="${addErrorMessage}" 
-				      style="color: red;"></p>
-		
-		
-		    </div>
-		</div>
+					<p th:if="${addconfirmationmessage != null and !addconfirmationmessage.isEmpty()}" 
+					   th:text="${addconfirmationmessage}" 
+					   style="color: green;"></p>
+					   
+					   <p th:if="${addErrorMessage != null and !addErrorMessage.isEmpty()}" 
+					      th:text="${addErrorMessage}" 
+					      style="color: red;"></p>
+			
+			
+			    </div>
+			</div>
 	</div>
 
 </body>
