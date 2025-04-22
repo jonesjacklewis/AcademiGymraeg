@@ -29,7 +29,7 @@ public class Noun {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(nullable = false, updatable = false)
-	private Long id;
+	private Long nounId;
 
 	/**
 	 * welshNoun attribute. The Welsh language representation of the Noun.
@@ -65,57 +65,43 @@ public class Noun {
 	public Noun() {
 	}
 
-	/**
-	 * @return The value of "welshNoun"
-	 */
+	
 	public String getWelshNoun() {
 		return welshNoun;
 	}
 
-	/**
-	 * @param welshNoun=the value to assign to welshNoun
-	 */
+	
 	public void setWelshNoun(String welshNoun) {
 		this.welshNoun = welshNoun;
 	}
 
-	/**
-	 * @return The value of "englishNoun"
-	 */
+	
 	public String getEnglishNoun() {
 		return englishNoun;
 	}
 
-	/**
-	 * @param englishNoun=the value to assign to EnglishNoun
-	 */
+	
 	public void setEnglishNoun(String englishNoun) {
 		this.englishNoun = englishNoun;
 	}
 
-	/**
-	 * @return The value of "gender"
-	 */
+	
 	public Gender getGender() {
 		return gender;
 	}
 
-	/**
-	 * @param gender=the value to assign to Gender
-	 */
+	
 	public void setGender(Gender gender) {
 		this.gender = gender;
 	}
 
-	public void setId(Long nounId) {
-		this.id = nounId;
+	public void setNounId(Long nounId) {
+		this.nounId = nounId;
 	}
 
-	/**
-	 * @return The value of "id"
-	 */
-	public Long getId() {
-		return id;
+	
+	public Long getNounId() {
+		return nounId;
 	}
 
 	@Override
