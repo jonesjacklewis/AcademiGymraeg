@@ -37,14 +37,14 @@ public class TestConfigurer {
         for (int i = 0; i < test.getNumberOfQuestions(); i++) {
 
             randomNounIndex = rand.nextInt(nounCount); /*Generate a random number between 0 and the number of nouns in the repo. */
-            nounIndexList.add(randomNounIndex);
 
             if (test.getNumberOfQuestions() > 1) { /*Preventing multiple questions being added if this test only expects one question. */
-                while (!nounIndexList.contains(randomNounIndex)){ /*Checking that the random index doesn't already exist in the list before adding it, to prevent duplicates. */
-                randomNounIndex = rand.nextInt(nounCount);
-                nounIndexList.add(randomNounIndex);
+                while (nounIndexList.contains(randomNounIndex)) { /*Checking that the random index doesn't already exist in the list before adding it, to prevent duplicates. */
+                    randomNounIndex = rand.nextInt(nounCount);
                 }
             }
+
+            nounIndexList.add(randomNounIndex); /*Add the unique random index to the list. */
         }
 
         List<Noun> selectedNouns = new ArrayList<>();
