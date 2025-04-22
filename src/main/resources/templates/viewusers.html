@@ -1,37 +1,55 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="author" content="thh21bgf">
-<title>Academi Gymraeg | View Users</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="thh21bgf, grs22lkc">
+	<link href="../css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
+	<title>Academi Gymraeg | View Users</title>
 </head>
 <body>
-	<h2>All Nouns</h2>
-
-	<span style="color: green">
-		<th:block th:text="${editconfirmationmessage} ?: ''"></th:block>			
-	</span><br><br>
-
-	<div>	
-		<table>
-			<tr>
-				<th>User ID</th>
-				<th>Email</th>
-				<th>Forename</th>
-			</tr>
-			<tr th:each="u : ${allusers}">
-				<th th:text="${u.userId}"></th>
-				<th th:text="${u.username}"></th>
-				<th th:text="${u.forename}"></th>
-				<th><a th:href="@{edituser/{id}(id = ${u.userId})}">EDIT</a>
-				<a th:href="@{/deleteuser/{id}(id = ${u.userId})}" th:data-user="'Are you sure you wish to delete the user ' + ${u.username} + '?'" th:onclick="return confirm(this.getAttribute('data-user')) ? true : false;">DELETE</a></th>
-			</tr>
-		</table>
-		
-		<a href="/home">Back</a>
-		
+    <div id="header">
+	    <img id="logo" th:src="@{/images/logo.png}" alt="Academi Gymraeg Logo">
+	    <a href="/logout" id="logout">Log Out </a>
 	</div>
-
+	<div id="nav-bar">
+		<a href="/home" id="nav-link-home">Welcome</a>
+		<a href="/test" id="nav-link-test">Take Test</a>
+		<a href="/viewResults" id="nav-link-results">View Results</a>
+		<a href="/viewusers" id="nav-link-viewusers" th:style="'color: red; background-color: white'">View Users</a>
+    	<a href="/addUser" id="nav-link-users">User Admin</a>
+    	<a href="/noun" id="nav-link-nouns">Noun Admin</a>
+	</div>
+	
+	<div id="container">
+		
+		<h1>View Users</h1>
+	
+		<span style="color: green">
+			<th:block th:text="${editconfirmationmessage} ?: ''"></th:block>			
+		</span><br><br>
+	
+		<div id="view-users">
+			<table>
+				<tr class="table-header">
+					<th>User ID</th>
+					<th>Email</th>
+					<th>Forename</th>
+					<th>Action</th>
+				</tr>
+				<tr th:each="u : ${allusers}">
+					<th th:text="${u.userId}"></th>
+					<th th:text="${u.username}"></th>
+					<th th:text="${u.forename}"></th>
+					<th><a class="edit-button" th:href="@{edituser/{id}(id = ${u.userId})}">EDIT</a>
+					<a class="delete-button" th:href="@{/deleteuser/{id}(id = ${u.userId})}" th:data-user="'Are you sure you wish to delete the user ' + ${u.username} + '?'" th:onclick="return confirm(this.getAttribute('data-user')) ? true : false;">DELETE</a></th>
+				</tr>
+			</table>
+			
+			<br><br>
+			<a href="/home">Back</a>
+			
+		</div>
+	</div>
 </body>
 </html>

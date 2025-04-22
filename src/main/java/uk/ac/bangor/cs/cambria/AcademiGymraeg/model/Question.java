@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -79,7 +80,7 @@ public class Question {
 	@GeneratedValue
 	@Column(nullable = false, updatable = false)
 	@NotBlank
-	private Long id;
+	private Long questionId;
 
 	/**
 	 * Question attribute. The string containing the actual question being asked.
@@ -125,6 +126,9 @@ public class Question {
 	public String toString() {
 		return questionString;
 	}
+    public Long getQuestionId() {
+        return questionId;
+    }
 
     public Long getId() {
         return id;
