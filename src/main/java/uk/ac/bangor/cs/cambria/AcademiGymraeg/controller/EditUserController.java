@@ -16,6 +16,7 @@ import jakarta.validation.Valid;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.Noun;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.User;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.UserRepository;
+import uk.ac.bangor.cs.cambria.AcademiGymraeg.util.UserService;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.util.ValidatorService;
 
 /**
@@ -31,7 +32,6 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.util.ValidatorService;
 @PreAuthorize("hasRole('ADMIN')")
 public class EditUserController {
 	
-
 	@Autowired
 	private UserRepository repo;
 		

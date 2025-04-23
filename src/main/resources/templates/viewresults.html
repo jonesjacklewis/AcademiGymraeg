@@ -64,12 +64,12 @@
 	    <a href="/logout" id="logout">Log Out </a>
 	</div>
 	<div id="nav-bar">
-<a href="/home" id="nav-link-home">Welcome</a>
+		<a href="/home" id="nav-link-home">Welcome</a>
 		<a href="/test" id="nav-link-test">Take Test</a>
 		<a href="/viewResults" id="nav-link-results" th:style="'color: red; background-color: white'">View Results</a>
-		<a href="/viewusers" id="nav-link-viewusers">View Users</a>
-    	<a href="/addUser" id="nav-link-users">User Admin</a>
-    	<a href="/noun" id="nav-link-nouns">Noun Admin</a>
+		<a th:if="${isAdmin}" href="/viewusers" id="nav-link-viewusers">View Users</a>
+    	<a th:if="${isAdmin}" href="/addUser" id="nav-link-users">User Admin</a>
+    	<a th:if="${isInstructor}" href="/noun" id="nav-link-nouns">Noun Admin</a>
 		
 	</div>
 	

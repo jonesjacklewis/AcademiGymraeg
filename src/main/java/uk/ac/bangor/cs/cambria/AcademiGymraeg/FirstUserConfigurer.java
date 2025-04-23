@@ -29,7 +29,7 @@ public class FirstUserConfigurer {
 		User u = new User();
 
 		u.setAdmin(true);
-		u.setInstructor(true);
+		u.setInstructor(false);
 		u.setPassword(encoder.encode("password123!"));
 		u.setForename("admin");
 		u.setUsername("admin@academigymraeg.com");
