@@ -2,6 +2,7 @@ package uk.ac.bangor.cs.cambria.AcademiGymraeg;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.enums.QuestionType;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.Noun;
@@ -13,6 +14,7 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.QuestionRepository;
  * @author dwp22pzv
  */
 
+@Component
 public class QuestionConfigurer {
 
     @Autowired

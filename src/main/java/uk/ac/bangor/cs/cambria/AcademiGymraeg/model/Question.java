@@ -91,8 +91,9 @@ public class Question {
 	/**
 	 * Noun attribute, the Noun object used by the question.
 	 */
-	@Column(nullable = false)
+	@JoinColumn(nullable = false)
 	@NotBlank
+	@ManyToOne
 	private Noun noun;
 
 	/**

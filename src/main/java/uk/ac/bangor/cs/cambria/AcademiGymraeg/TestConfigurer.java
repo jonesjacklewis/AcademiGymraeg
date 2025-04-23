@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.springframework.stereotype.Component;
+
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.Noun;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.Test;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.NounRepository;
@@ -11,6 +13,8 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.NounRepository;
 /**
  * @author dwp22pzv
  */
+
+@Component
 public class TestConfigurer {
 
     private NounRepository nounRepo;
