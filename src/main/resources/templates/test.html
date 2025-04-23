@@ -30,14 +30,16 @@
               <h2>Take a Test</h2>
         
 
-              <form th:action="@{/taketest}" method="POST" th:object="${test}">
-                <div class="question-container" th:each="question, iterStat : ${questions}">
-                  <p th:text="${iterStat.index + 1} + '. ' + ${question.questionText}"></p>
-                  <input type="text" th:field="*{answers[iterStat.index]}"/><br/>
+              <form th:action="@{/submitTest}" method="POST" th:object="${test}">
+				<p>QuestionForm</p>
+				
+                <div class="question-container" th:each="question : ${questions}">
+					<p>QuestionDiv</p>
+                  <p th:text= "${question.questionString}"></p>
+                  <input type="text" th:field="*{question.givenAnswer}"/><br/>
                 </div>
-                <input type="hidden" th:field="*{testId}"/>
+                
                 <button type="submit">Submit</button>
-
 
               </form>
 

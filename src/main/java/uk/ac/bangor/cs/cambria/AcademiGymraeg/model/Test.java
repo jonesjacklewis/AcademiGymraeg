@@ -4,7 +4,11 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,14 +16,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
+import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.QuestionRepository;
 
 /**
  * @author thh21bgf, jcj23xfb
  */
 
 @Entity
+@Table(name = "test")
 public class Test {
 
 	@Transient
@@ -49,10 +57,33 @@ public class Test {
 	@NotNull
 	@JoinColumn(nullable = false, updatable = false)
 	private User user;
+	
+	@OneToMany(mappedBy = "test", cascade = CascadeType.ALL)
+	@JoinColumn
+	private List<Question> questions;
+
+	
+	public List<Question> getQuestions() {
+		return questions;
+	}
+	
+	@Autowired
+	public void setQuestions(QuestionRepository questionRepo) {
+		
+		List<Question> questions = questionRepo.findAllByTest(this);
+		
+		this.questions = questions;
+	}
 
 	public Test() {
 	}
-
+	
+	/**
+	 * 
+	 * @param user - the user taking the test
+	 * @param startDateTime - the time the test was started
+	 * @param numberOfQuestions - how many questions should the test have?
+	 */
 	public Test(@NotNull User user, @NotNull ZonedDateTime startDateTime, @NotNull int numberOfQuestions) {
 		this.user = user;
 		this.startDateTime = startDateTime;
@@ -127,5 +158,7 @@ public class Test {
 	public void setUser(User user) {
 		this.user = user;
 	}
+	
+
 
 }

@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.QuestionConstruction;
@@ -19,7 +20,7 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.questionConstruction.WelshQuestion
  */
 
 @Entity
-
+@Table(name = "question")
 public class Question {
 
 	public Question() {
@@ -78,7 +79,7 @@ public class Question {
 	@Id
 	@GeneratedValue
 	@Column(nullable = false, updatable = false)
-	@NotBlank
+	@NotNull
 	private Long questionId;
 
 	/**
@@ -92,7 +93,7 @@ public class Question {
 	 * Noun attribute, the Noun object used by the question.
 	 */
 	@JoinColumn(nullable = false)
-	@NotBlank
+	@NotNull
 	@ManyToOne
 	private Noun noun;
 
@@ -101,7 +102,7 @@ public class Question {
 	 * to Welsh, Welsh to English, or Gender.
 	 */
 	@Column(nullable = false)
-	@NotBlank
+	@NotNull
 	private QuestionType questionType;
 
 	/**

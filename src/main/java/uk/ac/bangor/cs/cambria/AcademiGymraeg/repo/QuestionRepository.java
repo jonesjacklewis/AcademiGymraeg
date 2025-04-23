@@ -12,7 +12,7 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.Test;
  * @author dwp22pzv
  */
 
- @Repository
+@Repository
 public interface QuestionRepository extends JpaRepository<Question, Long> {
     List<Question> findAllByTest(Test test);
 }

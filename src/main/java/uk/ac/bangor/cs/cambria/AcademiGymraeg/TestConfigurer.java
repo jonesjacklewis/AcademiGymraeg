@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.Noun;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.Test;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.NounRepository;
+import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.QuestionRepository;
 
 /**
  * @author dwp22pzv
@@ -17,7 +19,15 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.NounRepository;
 @Component
 public class TestConfigurer {
 
+	@Autowired
     private NounRepository nounRepo;
+
+	private QuestionConfigurer questionConfig;
+	@Autowired
+	public TestConfigurer(QuestionConfigurer questionConfig) {
+		this.questionConfig = questionConfig;
+	}
+	
 
     /** 
      * Gets the required number of Nouns from the repo and passes them to QuestionConfigurer. This can be a temporary solution, just doing it here to help with linking QuestionConfigurer to tests in general.
@@ -55,8 +65,8 @@ public class TestConfigurer {
         for (int nounIndex : nounIndexList){
             selectedNouns.add(allNouns.get(nounIndex)); /*nounIndex is not necessarily the same as the actual ID of the actual noun in the database table, it's just that noun's position in the list pulled from the repo. */
         }
+        
 
-        QuestionConfigurer questionConfig = new QuestionConfigurer();
         questionConfig.configureQuestion(selectedNouns, test);
     }
 
