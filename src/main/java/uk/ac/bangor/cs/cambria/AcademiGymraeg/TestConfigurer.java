@@ -15,11 +15,11 @@ public class TestConfigurer {
 
     private NounRepository nounRepo;
 
-    /* Gets the required number of Nouns from the repo and passes them to QuestionConfigurer. This can be a temporary solution, just doing it here to help with linking QuestionConfigurer to tests in general.
-    Checks for duplicates, so should only get unique nouns.
-    Once this is done, the Test can find it's associated questions by looking in the Question repo for any Questions with the matching Test object.
-     * Parameters:
-     *  Test test: the Test object to generate questions for. 
+    /** 
+     * Gets the required number of Nouns from the repo and passes them to QuestionConfigurer. This can be a temporary solution, just doing it here to help with linking QuestionConfigurer to tests in general.
+     * Checks for duplicates, so should only get unique nouns.
+     * Once this is done, the Test can find it's associated questions by looking in the Question repo for any Questions with the matching Test object.
+     * @param Test test: the Test object to generate questions for. 
      */
     public void generateQuestionsForTest(Test test){
 
