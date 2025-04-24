@@ -52,7 +52,7 @@ public class NounController {
 	 * @apiNote GET requests to "/noun" (Initial request)
 	 */
 	@GetMapping
-	@PreAuthorize("hasRole('INSTRUCTOR')" + " or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('INSTRUCTOR')")
 	public String nounAdminPage(Model m) {
 
 		// Retrieve individual user attributes
