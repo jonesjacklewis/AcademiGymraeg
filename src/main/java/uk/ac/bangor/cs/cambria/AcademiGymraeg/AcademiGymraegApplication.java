@@ -17,7 +17,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.User;
 
 /**
- * @author jcj23xfb
+ * @author jcj23xfb, grs22lkc
  */
 @SpringBootApplication
 @EnableWebSecurity

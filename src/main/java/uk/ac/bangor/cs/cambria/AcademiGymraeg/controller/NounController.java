@@ -18,6 +18,7 @@ import jakarta.validation.Valid;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.enums.Gender;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.Noun;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.NounRepository;
+import uk.ac.bangor.cs.cambria.AcademiGymraeg.util.UserService;
 
 /**
  * @author ptg22svs, cnb22xdk
@@ -30,7 +31,9 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.NounRepository;
 @RequestMapping("/noun")
 public class NounController {
 	
-
+	@Autowired
+    private UserService userService; //Get logged in user details
+	
 	@Autowired
 	private NounRepository repo;
 
@@ -52,6 +55,20 @@ public class NounController {
 	@PreAuthorize("hasRole('INSTRUCTOR')" + " or hasRole('ADMIN')")
 	public String nounAdminPage(Model m) {
 
+		// Retrieve individual user attributes
+        Long userId = userService.getLoggedInUserId();
+        String forename = userService.getLoggedInUserForename();
+        String email = userService.getLoggedInUserEmail();
+        boolean isAdmin = userService.isLoggedInUserAdmin();
+        boolean isInstructor = userService.isLoggedInUserInstructor();
+
+        // Add each attribute to the model separately
+        m.addAttribute("userId", userId);
+        m.addAttribute("forename", forename);
+        m.addAttribute("email", email);
+        m.addAttribute("isAdmin", isAdmin);
+        m.addAttribute("isInstructor", isInstructor);
+		
 		if (!m.containsAttribute("noun"))
 			m.addAttribute("noun", new Noun());
 		
