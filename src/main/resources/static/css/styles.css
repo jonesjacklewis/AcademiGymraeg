@@ -60,8 +60,9 @@ h2 {
 	background-color: #d9e7ff;
 	padding: 5px 10px;
 }
-th {
+th, td {
 	padding: 8px 8px 8px 8px;
+	text-align: center;
 }
 
 a.edit-button {
@@ -83,6 +84,17 @@ a.delete-button {
 	padding: 2px 6px 2px 6px;
 	text-decoration: none;
 }
+
+.back-link {
+      display: inline-block;
+      margin-top: 20px;
+      background-color: green;
+      color: white;
+      padding: 10px 30px;
+      text-decoration: none;
+      font-size: 18px;
+      border-radius: 4px;
+    }
 
 
 
@@ -220,4 +232,26 @@ a.delete-button {
 	}
 #view-users table th {
 	width: 200px;
+}	
+
+/* VIEW TEST RESULTS PAGE SPECIFIC CSS */
+
+#view-results button {
+	background-color: green;
+	padding: 6px 25px;
+	color: white;
+	}
+
+#view-results table {
+	width: 1000px;
+	border-style: solid;
+ 	border-width: 1px;
+ 	
+}
+#view-results table tr:nth-child(even) {
+	background-color: #f2f2f2;
+	padding: 6px 10px;
+	}
+#view-results table th {
+	width: 300px;
 }	
