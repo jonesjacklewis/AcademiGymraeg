@@ -24,7 +24,6 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.questionConstruction.WelshQuestion
 public class Question {
 
 	public Question() {
-
 	}
 
 	public Question(  @NotBlank Noun noun, @NotBlank QuestionType questionType,  Test test) {
@@ -35,21 +34,28 @@ public class Question {
 		generateQuestion();
 	}
 	
+	/**
+	 * Determines the correct answer and the user-readable string of the question, based on the question type.
+	 */
 	private void generateQuestion(){
 
 		QuestionConstruction questionConstructor;
+		String queriedNoun;
 
             switch (this.questionType){
                 case WELSH_TO_ENGLISH ->  {
                      questionConstructor = new EnglishQuestionImpl();
+                     queriedNoun = noun.getWelshNoun();
                      this.correctAnswer = noun.getEnglishNoun();
                     }
                 case ENGLISH_TO_WELSH ->  {
                     questionConstructor = new WelshQuestionImpl();
+                    queriedNoun = noun.getEnglishNoun();
                     this.correctAnswer = noun.getWelshNoun();
                 }
                 case GENDER ->  {
                      questionConstructor = new GenderQuestionImpl();
+                     queriedNoun = noun.getWelshNoun();
                      this.correctAnswer = noun.getGender().name();
                     }
                 default -> {
@@ -57,9 +63,13 @@ public class Question {
                     }
             }
 
-		this.questionString = questionConstructor.constructQuestion(this.noun.toString());
+		this.questionString = questionConstructor.constructQuestion(queriedNoun);
 	}
 
+	/**
+	 * Checks the user-given answer against the stored correct answer.
+	 * @return Boolean True if the given answer matches the correct answer, false if not.
+	 */
 	public Boolean checkAnswer(){
 		if (this.givenAnswer.isEmpty() || this.givenAnswer.isBlank()){
 			return false;

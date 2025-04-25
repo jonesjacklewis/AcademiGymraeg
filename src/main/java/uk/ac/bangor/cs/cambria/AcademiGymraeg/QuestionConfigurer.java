@@ -22,8 +22,6 @@ public class QuestionConfigurer {
     public QuestionConfigurer(QuestionRepository repo) {
     	this.repo = repo;
     }
-    
-    
 
     /**
      * For a given list of nouns, generate questions with an evenly split selection of question types.
@@ -46,7 +44,6 @@ public class QuestionConfigurer {
             
             i++;
         }
-        
         test.setQuestions(repo);
     }
 
@@ -64,10 +61,6 @@ public class QuestionConfigurer {
             
             repo.save(newQuestion);
         }
-        
         test.setQuestions(repo);
     }
-
-    
-
 }

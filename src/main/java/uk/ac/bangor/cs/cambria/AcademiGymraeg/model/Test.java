@@ -23,7 +23,7 @@ import jakarta.validation.constraints.NotNull;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.QuestionRepository;
 
 /**
- * @author thh21bgf, jcj23xfb
+ * @author thh21bgf, jcj23xfb, dwp22pzv
  */
 
 @Entity
@@ -59,27 +59,28 @@ public class Test {
 	private User user;
 	
 	@OneToMany(mappedBy = "test", cascade = CascadeType.ALL)
-	@JoinColumn
-	private List<Question> questions;
+	private List<Question> questions; //Even though we initially decided we would have the relationship between tests and questions determined on the question side (with Q having a foreign key for T), it seems like thymeleaf prefers having it declared here
 
 	
 	public List<Question> getQuestions() {
 		return questions;
 	}
 	
+	/**
+	 * Gets all the questions in the question repo which have this test ID, and stores them in this test's questions list.
+	 * @param questionRepo
+	 */
 	@Autowired
 	public void setQuestions(QuestionRepository questionRepo) {
 		
-		List<Question> questions = questionRepo.findAllByTest(this);
-		
-		this.questions = questions;
+		this.questions = questionRepo.findAllByTest(this);
 	}
 
 	public Test() {
 	}
 	
 	/**
-	 * 
+	 * Default constructor
 	 * @param user - the user taking the test
 	 * @param startDateTime - the time the test was started
 	 * @param numberOfQuestions - how many questions should the test have?
@@ -93,6 +94,14 @@ public class Test {
 		this.numberCorrect = 0;
 	}
 
+	/**
+	 * Alternate constructor, with the ability to set the amount of questions correct for testing/debug
+	 * @param user
+	 * @param startDateTime
+	 * @param endDateTime
+	 * @param numberCorrect
+	 * @param numberOfQuestions
+	 */
 	public Test(@NotNull User user, @NotNull ZonedDateTime startDateTime, @NotNull ZonedDateTime endDateTime,
 			@NotNull int numberCorrect, @NotNull int numberOfQuestions) {
 		this.user = user;

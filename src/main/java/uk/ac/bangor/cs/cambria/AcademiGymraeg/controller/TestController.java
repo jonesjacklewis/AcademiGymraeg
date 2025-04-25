@@ -37,28 +37,24 @@ public class TestController {
     
     private List<Question> questions;
     
-    //@GetMapping({"/{id}", "/test"})
-    //public String takeTest(@PathVariable("id") Long id) {
+    /**
+     * Called when the Take Test button on the homepage is pressed.
+     * 
+     * @param model
+     * @return String html template to render ("test")
+     */
     @GetMapping({"/test"})
     public String takeTest(Model model) {
     	
     	Long id = (long) 1; //TODO: Replace with an actual user ID, this one is just a placeholder
     	
-    	System.out.println("Id: " + id);
-    	
     	Optional<User> user = userRepo.findById(id);
     	
     	User currentUser = user.get(); //Need to handle a missing user, but waiting until we decide on how to handle getting the current user.
     	
-    	System.out.println("User: " + user);
-    	
-    	ZonedDateTime timeOfTest = ZonedDateTime.now();
-    	
-    	System.out.println("Time: " + timeOfTest);
-    	
     	int numberOfQuestions = 20; //Did we plan on storing the default number of questions somewhere else?
 
-        Test test = new Test(currentUser,  timeOfTest, numberOfQuestions);
+        Test test = new Test(currentUser,  ZonedDateTime.now(), numberOfQuestions);
 
         testRepo.save(test);
         
@@ -68,7 +64,6 @@ public class TestController {
         
         model.addAttribute("test", test);
         model.addAttribute("questions", questions);
-
 
         return "test"; // Return the name of the HTML template to render
     }

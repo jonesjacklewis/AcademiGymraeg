@@ -57,7 +57,6 @@ public class TestConfigurer {
                     randomNounIndex = rand.nextInt(nounCount);
                 }
             }
-
             nounIndexList.add(randomNounIndex); /*Add the unique random index to the list. */
         }
 
@@ -66,7 +65,6 @@ public class TestConfigurer {
             selectedNouns.add(allNouns.get(nounIndex)); /*nounIndex is not necessarily the same as the actual ID of the actual noun in the database table, it's just that noun's position in the list pulled from the repo. */
         }
         
-
         questionConfig.configureQuestion(selectedNouns, test);
     }
 
