@@ -25,7 +25,11 @@
 	<div id="container">
 	    <h1>Noun Admin</h1>
 		
+		
 		<h2>Add a new Noun</h2>
+		
+		<span id="top-grid">
+		
 		<div id="add-noun">
 			<form th:action="@{/noun}" method="POST" th:object="${noun}">
 				<div>
@@ -60,16 +64,18 @@
 			</form>
 		</div>
 		
-		<span style="color: green">
+		<span id="confirmmessageblock">
 			<th:block th:text="${addconfirmationmessage} ?: ''"></th:block>
-			<th:block th:text="${editconfirmationmessage} ?: ''"></th:block>			
+			<th:block th:text="${editconfirmationmessage} ?: ''"></th:block>	
+			<th:block th:text="${deleteconfirmationmessage} ?: ''"></th:block>		
 		</span>
-				
+		</span>
+		
 					
 		<br>
 		<h2>All Nouns</h2>
 		
-		<span style="color: green"><th:block th:text="${deleteconfirmationmessage} ?: ''"></th:block></span>
+		
 		<div id="all-nouns">
 			<table>
 			 <tr class="table-header">

@@ -132,7 +132,7 @@ public class Question {
     }
 
     public Long getId() {
-        return id;
+        return questionId;//!!
     }
 
     public String getQuestionString() {
