@@ -4,22 +4,36 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.Noun;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.Test;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.NounRepository;
+import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.QuestionRepository;
 
 /**
  * @author dwp22pzv
  */
+
+@Component
 public class TestConfigurer {
 
+	@Autowired
     private NounRepository nounRepo;
 
-    /* Gets the required number of Nouns from the repo and passes them to QuestionConfigurer. This can be a temporary solution, just doing it here to help with linking QuestionConfigurer to tests in general.
-    Checks for duplicates, so should only get unique nouns.
-    Once this is done, the Test can find it's associated questions by looking in the Question repo for any Questions with the matching Test object.
-     * Parameters:
-     *  Test test: the Test object to generate questions for. 
+	private QuestionConfigurer questionConfig;
+	@Autowired
+	public TestConfigurer(QuestionConfigurer questionConfig) {
+		this.questionConfig = questionConfig;
+	}
+	
+
+    /** 
+     * Gets the required number of Nouns from the repo and passes them to QuestionConfigurer. This can be a temporary solution, just doing it here to help with linking QuestionConfigurer to tests in general.
+     * Checks for duplicates, so should only get unique nouns.
+     * Once this is done, the Test can find it's associated questions by looking in the Question repo for any Questions with the matching Test object.
+     * @param Test test: the Test object to generate questions for. 
      */
     public void generateQuestionsForTest(Test test){
 
@@ -43,7 +57,6 @@ public class TestConfigurer {
                     randomNounIndex = rand.nextInt(nounCount);
                 }
             }
-
             nounIndexList.add(randomNounIndex); /*Add the unique random index to the list. */
         }
 
@@ -51,8 +64,7 @@ public class TestConfigurer {
         for (int nounIndex : nounIndexList){
             selectedNouns.add(allNouns.get(nounIndex)); /*nounIndex is not necessarily the same as the actual ID of the actual noun in the database table, it's just that noun's position in the list pulled from the repo. */
         }
-
-        QuestionConfigurer questionConfig = new QuestionConfigurer();
+        
         questionConfig.configureQuestion(selectedNouns, test);
     }
 
