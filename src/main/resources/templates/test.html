@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="dwp22pzv">
+    <link href="../css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
+    <title>Academi Gymraeg | Take Test</title>
+
+</head>
+
+<body>
+    <div id="header">
+	    <img id="logo" th:src="@{/images/logo.png}" alt="Academi Gymraeg Logo">
+	    <a href="/logout" id="logout">Log Out </a>
+	</div>
+
+    <div id="nav-bar">
+        <a href="/home" id="nav-link-home">Welcome</a>
+                <a href="/test" id="nav-link-test">Take Test</a>
+                <a href="/viewResults" id="nav-link-results" th:style="'color: red; background-color: white'">View Results</a>
+                <a href="/viewusers" id="nav-link-viewusers">View Users</a>
+                <a href="/addUser" id="nav-link-users">User Admin</a>
+                <a href="/noun" id="nav-link-nouns">Noun Admin</a>
+                
+            </div>
+            
+            <div class="test-container">
+              <h2>Take a Test</h2>
+        
+
+              <form th:action="@{/submitTest}" method="GET" th:object="${test}">
+				<p>QuestionForm</p>
+				
+				<div class="question-container" th:each="question, iterStat : *{questions}">
+				    <p th:text="${question.questionString}"></p>
+				    <input type="text" th:field="*{questions[__${iterStat.index}__].givenAnswer}"/><br/>
+				</div>
+
+                
+                <button type="submit">Submit</button>
+
+              </form>
+
+        
+              <a class="back-link" href="/home">Back</a>
+            </div>
+
+</body>
+</html>

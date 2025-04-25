@@ -82,8 +82,8 @@
 				<th th:text="${n.englishNoun}"></th>
 				<th th:text="${n.welshNoun}"></th>
 				<th th:text="${n.gender}"></th>
-				<th><a class="edit-button" th:href="@{noun/editnoun/{id}(id = ${n.id})}">EDIT</a>
-				<a class="delete-button" th:href="@{/noun/deletenoun/{id}(id = ${n.id})}" th:data-noun="'Are you sure you wish to delete the noun ' + ${n.toString()} + '?'" th:onclick="return confirm(this.getAttribute('data-noun')) ? true : false;">DELETE</a></th>
+				<th><a class="edit-button" th:href="@{noun/editnoun/{id}(id = ${n.nounId})}">EDIT</a>
+				<a class="delete-button" th:href="@{/noun/deletenoun/{id}(id = ${n.nounId})}" th:data-noun="'Are you sure you wish to delete the noun ' + ${n.toString()} + '?'" th:onclick="return confirm(this.getAttribute('data-noun')) ? true : false;">DELETE</a></th>
 			</tr>
 			</table>
 		</div><br>
