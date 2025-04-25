@@ -8,6 +8,7 @@
 	<title>Academi Gymraeg | View Users</title>
 </head>
 <body>
+
     <div id="header">
 	    <img id="logo" th:src="@{/images/logo.png}" alt="Academi Gymraeg Logo">
 	    <a href="/logout" id="logout">Log Out </a>
@@ -16,9 +17,9 @@
 		<a href="/home" id="nav-link-home">Welcome</a>
 		<a href="/test" id="nav-link-test">Take Test</a>
 		<a href="/viewResults" id="nav-link-results">View Results</a>
-		<a href="/viewusers" id="nav-link-viewusers" th:style="'color: red; background-color: white'">View Users</a>
-    	<a href="/addUser" id="nav-link-users">User Admin</a>
-    	<a href="/noun" id="nav-link-nouns">Noun Admin</a>
+		<a th:if="${isAdmin}" href="/viewusers" id="nav-link-viewusers" th:style="'color: red; background-color: white'">View Users</a>
+    	<a th:if="${isAdmin}" href="/addUser" id="nav-link-users">User Admin</a>
+    	<a th:if="${isInstructor}" href="/noun" id="nav-link-nouns">Noun Admin</a>
 	</div>
 	
 	<div id="container">
