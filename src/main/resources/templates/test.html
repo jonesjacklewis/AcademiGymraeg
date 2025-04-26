@@ -4,7 +4,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="dwp22pzv">
+    <meta name="author" content="dwp22pzv, jcj23xfb">
     <link href="../css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
     <title>Academi Gymraeg | Take Test</title>
 
@@ -17,13 +17,13 @@
 	</div>
 
     <div id="nav-bar">
-        <a href="/home" id="nav-link-home">Welcome</a>
-                <a href="/test" id="nav-link-test">Take Test</a>
-                <a href="/viewResults" id="nav-link-results" th:style="'color: red; background-color: white'">View Results</a>
-                <a href="/viewusers" id="nav-link-viewusers">View Users</a>
-                <a href="/addUser" id="nav-link-users">User Admin</a>
-                <a href="/noun" id="nav-link-nouns">Noun Admin</a>
-                
+		<a href="/home" id="nav-link-home">Welcome</a>
+				<a href="/test" id="nav-link-test" th:style="'color: red; background-color: white'">Take Test</a>
+				<a href="/viewResults" id="nav-link-results">View Results</a>
+				<a th:if="${isAdmin}" href="/viewusers" id="nav-link-viewusers">View Users</a>
+		    	<a th:if="${isAdmin}" href="/addUser" id="nav-link-users">User Admin</a>
+		    	<a th:if="${isInstructor}" href="/noun" id="nav-link-nouns">Noun Admin</a>
+
             </div>
             
             <div class="test-container">
@@ -35,8 +35,25 @@
 				
 				<div class="question-container" th:each="question, iterStat : *{questions}">
 				    <p th:text="${question.questionString}"></p>
-				    <input type="text" th:field="*{questions[__${iterStat.index}__].givenAnswer}"/><br/>
-				</div>
+					
+					<div th:switch="${question.questionType}">
+					    <div th:case="${T(uk.ac.bangor.cs.cambria.AcademiGymraeg.enums.QuestionType).GENDER}">
+					        <label>
+					            <input type="radio" th:field="*{questions[__${iterStat.index}__].givenAnswer}" value="MASCULINE"/> Masculine
+					        </label>
+					        <label>
+					            <input type="radio" th:field="*{questions[__${iterStat.index}__].givenAnswer}" value="FEMININE"/> Feminine
+					        </label>
+					    </div>
+					    <div th:case="*">
+					        <input type="text" th:field="*{questions[__${iterStat.index}__].givenAnswer}"/>
+					    </div>
+					</div>
+
+
+					
+										
+					</div>
 
                 
                 <button type="submit">Submit</button>

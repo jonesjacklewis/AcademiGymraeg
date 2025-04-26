@@ -15,6 +15,7 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.User;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.QuestionRepository;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.TestRepository;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.UserRepository;
+import uk.ac.bangor.cs.cambria.AcademiGymraeg.util.UserService;
 
 /**
  * @author dwp22pzv
@@ -35,6 +36,9 @@ public class TestController {
     @Autowired
     private TestConfigurer testConfig;
     
+    @Autowired
+    private UserService userService; //Get logged in user details
+    
     private List<Question> questions;
     
     /**
@@ -46,11 +50,22 @@ public class TestController {
     @GetMapping({"/test"})
     public String takeTest(Model model) {
     	
-    	Long id = (long) 1; //TODO: Replace with an actual user ID, this one is just a placeholder
+    	Long id = userService.getLoggedInUserId();
+    	
+    	if(id == null) {
+    		return "home";
+    	}
     	
     	Optional<User> user = userRepo.findById(id);
     	
+    	if(user.isEmpty()) {
+    		return "home";
+    	}
+    	
     	User currentUser = user.get(); //Need to handle a missing user, but waiting until we decide on how to handle getting the current user.
+    	
+    	boolean isAdmin = userService.isLoggedInUserAdmin();
+        boolean isInstructor = userService.isLoggedInUserInstructor();
     	
     	int numberOfQuestions = 20; //Did we plan on storing the default number of questions somewhere else?
 
@@ -64,6 +79,8 @@ public class TestController {
         
         model.addAttribute("test", test);
         model.addAttribute("questions", questions);
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("isInstructor", isInstructor);
 
         return "test"; // Return the name of the HTML template to render
     }
