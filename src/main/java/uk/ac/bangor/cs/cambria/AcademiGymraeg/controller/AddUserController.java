@@ -2,6 +2,7 @@ package uk.ac.bangor.cs.cambria.AcademiGymraeg.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +16,7 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.util.UserService;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.util.ValidatorService;
 
 /**
- * @author grs22lkc
+ * @author grs22lkc, jcj23xfb
  */
 
 @Controller
@@ -29,6 +30,9 @@ public class AddUserController {
 
 	@Autowired
 	private ValidatorService validator;
+	
+	@Autowired
+	private PasswordEncoder encoder;
 
 	public static String addConfirmationMessage = "";
 	public static String addErrorMessage = "";
@@ -77,6 +81,9 @@ public class AddUserController {
 
 		user.setAdmin(admin);
 		user.setInstructor(instructor);
+		
+		user.setPassword(encoder.encode(user.getPassword()));
+		
 		repo.save(user);
 		addConfirmationMessage = "User successfully added";
 		return "redirect:/addUser";
