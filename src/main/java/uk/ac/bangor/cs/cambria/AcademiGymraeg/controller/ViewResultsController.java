@@ -1,5 +1,7 @@
 package uk.ac.bangor.cs.cambria.AcademiGymraeg.controller;
 
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -57,22 +59,18 @@ public class ViewResultsController {
         m.addAttribute("isAdmin", isAdmin);
         m.addAttribute("isInstructor", isInstructor);
 		
-		List<User> users = userRepo.findAll();
-
-		if (users.isEmpty()) {
-			return "viewresults";
+		Optional<User> optionalU = userRepo.findById(userId);
+		
+		if(optionalU.isEmpty()) {
+			return "home";
 		}
-
-		User u = users.get(0);
-
-		Test t1 = new Test(u, ZonedDateTime.now(), 20);
-		t1.setEndDateTime(t1.getStartDateTime().plusMinutes(5));
-
-		t1.setNumberCorrect(7);
-
-		testRepo.save(t1);
-
+		
+		User u = optionalU.get();
+				
 		List<Test> tests = testRepo.findAllByUser(u);
+		
+		tests = tests.stream().filter(t -> t.getStartDateTime().isBefore(t.getEndDateTime())).toList();
+		
 		List<Result> results = rs.convertTestsToResults(tests);
 
 		m.addAttribute("allresults", results);
