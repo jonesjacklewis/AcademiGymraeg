@@ -1,6 +1,9 @@
 package uk.ac.bangor.cs.cambria.AcademiGymraeg.controller;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -13,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.TestConfigurer;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.Question;
@@ -54,7 +58,7 @@ public class TestController {
 	 * @return String html template to render ("test")
 	 */
 	@GetMapping({ "/test" })
-	public String takeTest(Model model) {
+	public String takeTest(Model model, RedirectAttributes redirectAttributes) {
 
 		Long id = userService.getLoggedInUserId();
 
@@ -68,8 +72,23 @@ public class TestController {
 			return "home";
 		}
 
-		User currentUser = user.get(); // Need to handle a missing user, but waiting until we decide on how to handle
-										// getting the current user.
+		User currentUser = user.get();
+
+		if (!currentUser.canStartNewTest()) {
+			Instant nextTestTime = currentUser.getNextTestStartTime();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+					.withZone(ZoneId.systemDefault());
+			String formattedTime = formatter.format(nextTestTime);
+
+			redirectAttributes.addFlashAttribute("errorMessage",
+					"You are not allowed to start a new test until: " + formattedTime);
+			return "redirect:/home";
+		}
+
+		Instant now = Instant.now();
+		currentUser.setTestStartTimetamp(now);
+
+		userRepo.save(currentUser);
 
 		boolean isAdmin = userService.isLoggedInUserAdmin();
 		boolean isInstructor = userService.isLoggedInUserInstructor();
@@ -140,6 +159,23 @@ public class TestController {
 		test.setEndDateTime(ZonedDateTime.now());
 
 		testRepo.save(test);
+
+		Long id = userService.getLoggedInUserId();
+
+		if (id == null) {
+			return "home";
+		}
+
+		Optional<User> user = userRepo.findById(id);
+
+		if (user.isEmpty()) {
+			return "home";
+		}
+
+		User currentUser = user.get();
+
+		currentUser.setTestStartTimetamp(Instant.EPOCH);
+		userRepo.save(currentUser);
 
 		return "redirect:/viewResults";
 

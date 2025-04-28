@@ -1,6 +1,9 @@
 package uk.ac.bangor.cs.cambria.AcademiGymraeg;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,78 +21,72 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.QuestionRepository;
 @Component
 public class QuestionConfigurer {
 
-    private final QuestionRepository repo;
-    @Autowired
-    public QuestionConfigurer(QuestionRepository repo) {
-    	this.repo = repo;
-    }
+	private final QuestionRepository repo;
 
-    /**
-     * For a given list of nouns, generate questions with an evenly split selection of question types.
-     *  @param List<Noun> nouns: A list of noun objects from which to derive questions
-     *  @param Test test: the test object these questions should be associated with.
-     */
-    public void configureQuestionOld(List<Noun> nouns, Test test){
+	@Autowired
+	public QuestionConfigurer(QuestionRepository repo) {
+		this.repo = repo;
+	}
 
-        int i = 0;
+	/**
+	 * For a given list of nouns, generate questions with an evenly split selection
+	 * of question types.
+	 * 
+	 * @param List<Noun> nouns: A list of noun objects from which to derive
+	 *                   questions
+	 * @param Test       test: the test object these questions should be associated
+	 *                   with.
+	 */
+	public void configureQuestion(List<Noun> nouns, Test test) {
 
-        for (Noun noun : nouns){
+		int questionTypeIndex = 0;
 
-            if( i >= QuestionType.values().length) { i = 0;} /*Loop the counter back around so it can only ever be within the range of question types. Not hardcoding the current 3 types in order to allow for future expansion. */
-            
-            QuestionType questionType = QuestionType.values()[i];
+		List<Question> questions = new ArrayList<Question>();
 
-            Question newQuestion = new Question( noun, questionType,  test);
-            
-            repo.save(newQuestion);
-            
-            i++;
-        }
-        test.setQuestionsWithRepo(repo);
-    }
-    
-    /**
-     * For a given list of nouns, generate questions with an evenly split selection of question types.
-     *  @param List<Noun> nouns: A list of noun objects from which to derive questions
-     *  @param Test test: the test object these questions should be associated with.
-     */
-    public void configureQuestion(List<Noun> nouns, Test test){
+		for (Noun noun : nouns) {
 
-        int questionTypeIndex = 0;
-        
-        List<Question> questions = new ArrayList<Question>();
+			if (questionTypeIndex >= QuestionType.values().length) {
+				questionTypeIndex = 0;
+			} /*
+				 * Loop the counter back around so it can only ever be within the range of
+				 * question types. Not hardcoding the current 3 types in order to allow for
+				 * future expansion.
+				 */
 
-        for (Noun noun : nouns){
+			QuestionType questionType = QuestionType.values()[questionTypeIndex];
 
-            if( questionTypeIndex >= QuestionType.values().length) { questionTypeIndex = 0;} /*Loop the counter back around so it can only ever be within the range of question types. Not hardcoding the current 3 types in order to allow for future expansion. */
-            
-            QuestionType questionType = QuestionType.values()[questionTypeIndex];
+			Question newQuestion = new Question(noun, questionType, test);
 
-            Question newQuestion = new Question( noun, questionType,  test);
-            
-            questions.add(newQuestion);
-            
-            questionTypeIndex++;
-        }
-        
-        repo.saveAll(questions);
-        test.setQuestionsWithRepo(repo);
-    }
+			questions.add(newQuestion);
 
-    /**
-     * For a given list of nouns, generate questions with a single given question type.
-     *  @param List<Noun> nouns: A list of noun objects from which to derive questions
-     *  @param Test test: the test object these questions should be associated with.
-     *  @param QuestionType questionType: a questionType enum which all generated questions will use.
-     */
-    public void configureQuestion(List<Noun> nouns, Test test, QuestionType questionType){
+			questionTypeIndex++;
+		}
 
-        for (Noun noun : nouns){
+		Collections.shuffle(questions);
 
-            Question newQuestion = new Question( noun, questionType,  test);
-            
-            repo.save(newQuestion);
-        }
-        test.setQuestionsWithRepo(repo);
-    }
+		repo.saveAll(questions);
+		test.setQuestionsWithRepo(repo);
+	}
+
+	/**
+	 * For a given list of nouns, generate questions with a single given question
+	 * type.
+	 * 
+	 * @param List<Noun>   nouns: A list of noun objects from which to derive
+	 *                     questions
+	 * @param Test         test: the test object these questions should be
+	 *                     associated with.
+	 * @param QuestionType questionType: a questionType enum which all generated
+	 *                     questions will use.
+	 */
+	public void configureQuestion(List<Noun> nouns, Test test, QuestionType questionType) {
+
+		for (Noun noun : nouns) {
+
+			Question newQuestion = new Question(noun, questionType, test);
+
+			repo.save(newQuestion);
+		}
+		test.setQuestionsWithRepo(repo);
+	}
 }

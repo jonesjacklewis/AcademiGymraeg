@@ -1,5 +1,7 @@
 package uk.ac.bangor.cs.cambria.AcademiGymraeg.model;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -57,6 +59,9 @@ public class User implements UserDetails {
 	/* Is the user an instructor? */
 	@Column(nullable = false)
 	private boolean instructor = false;
+
+	@Column
+	private Instant testStartTimestamp = Instant.EPOCH;
 
 	/*
 	 * Assigns specified access to user accounts based on if they are an
@@ -126,5 +131,26 @@ public class User implements UserDetails {
 	public void setInstructor(boolean instructor) {
 		this.instructor = instructor;
 	}
+
+	public Instant getTestStartTimetamp() {
+		return testStartTimestamp;
+	}
+
+	public void setTestStartTimetamp(Instant testStartTimetamp) {
+		this.testStartTimestamp = testStartTimetamp;
+	}
+
+	public boolean canStartNewTest() {
+		Instant now = Instant.now();
+		return testStartTimestamp.equals(Instant.EPOCH) || now.minusSeconds(30 * 60).isAfter(testStartTimestamp);
+	}
+
+	public Instant getNextTestStartTime() {
+		if (this.canStartNewTest()) {
+			return Instant.now();
+		}
+
+		return testStartTimestamp.plus(Duration.ofMinutes(30));
+	};
 
 }

@@ -3,7 +3,9 @@ package uk.ac.bangor.cs.cambria.AcademiGymraeg;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -41,54 +43,29 @@ public class TestConfigurer {
 	 * 
 	 * @param Test test: the Test object to generate questions for.
 	 */
-	public void generateQuestionsForTestOld(Test test) {
+	public void generateQuestionsForTest(Test test) {
 
 		if (test.getNumberOfQuestions() <= 0) {
 			throw new IllegalArgumentException(
 					"Test method .getNumberOfQuestions returned a value less than 1. This value needs to be at least 1 before questions can be generated for the test.");
 		}
 
-		List<Noun> allNouns = nounRepo.findAll();
-		int nounCount = allNouns.size(); /*
-											 * Is it more performant to count the repo directly, or should this count
-											 * the list that was pulled from the repo instead, since we need to get the
-											 * list anyway?
-											 */
+		List<Long> allNounIds = nounRepo.findAllBy().stream().map(n -> n.getId())
+				.collect(Collectors.toCollection(ArrayList::new));
 
-		Random rand = new Random();
-		int randomNounIndex;
-		List<Integer> nounIndexList = new ArrayList<>();
+		int nounCount = allNounIds.size();
 
-		for (int i = 0; i < test.getNumberOfQuestions(); i++) {
-
-			randomNounIndex = rand
-					.nextInt(nounCount); /* Generate a random number between 0 and the number of nouns in the repo. */
-
-			if (test.getNumberOfQuestions() > 1) { /*
-													 * Preventing multiple questions being added if this test only
-													 * expects one question.
-													 */
-				while (nounIndexList
-						.contains(randomNounIndex)) { /*
-														 * Checking that the random index doesn't already exist in the
-														 * list before adding it, to prevent duplicates.
-														 */
-					randomNounIndex = rand.nextInt(nounCount);
-				}
-			}
-			nounIndexList.add(randomNounIndex); /* Add the unique random index to the list. */
+		if (nounCount < test.getNumberOfQuestions()) {
+			throw new IllegalArgumentException("Not enough nouns in order to generate unique questions");
 		}
 
-		List<Noun> selectedNouns = new ArrayList<>();
-		for (int nounIndex : nounIndexList) {
-			selectedNouns.add(allNouns.get(nounIndex)); /*
-														 * nounIndex is not necessarily the same as the actual ID of the
-														 * actual noun in the database table, it's just that noun's
-														 * position in the list pulled from the repo.
-														 */
-		}
+		Collections.shuffle(allNounIds);
+		List<Long> selectedNounIds = allNounIds.subList(0, test.getNumberOfQuestions());
+
+		List<Noun> selectedNouns = nounRepo.findAllByIdIn(selectedNounIds);
 
 		questionConfig.configureQuestion(selectedNouns, test);
+
 	}
 
 	/**
@@ -101,7 +78,7 @@ public class TestConfigurer {
 	 * 
 	 * @param Test test: the Test object to generate questions for.
 	 */
-	public void generateQuestionsForTest(Test test) {
+	public void generateQuestionsForTestOld(Test test) {
 
 		if (test.getNumberOfQuestions() <= 0) {
 			throw new IllegalArgumentException(

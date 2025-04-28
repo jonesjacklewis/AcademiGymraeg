@@ -48,6 +48,9 @@
 					        <label>
 					            <input type="radio" th:field="*{questions[__${iterStat.index}__].givenAnswer}" value="FEMININE"/> Feminine
 					        </label>
+							<label>
+								<input type="radio" th:field="*{questions[__${iterStat.index}__].givenAnswer}" value="PLURAL"/> Plural
+							</label>
 					    </div>
 					    <div th:case="*">
 					        <input type="text" th:field="*{questions[__${iterStat.index}__].givenAnswer}"/>
