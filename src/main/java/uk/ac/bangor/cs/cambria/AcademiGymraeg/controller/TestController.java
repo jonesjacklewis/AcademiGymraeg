@@ -78,20 +78,12 @@ public class TestController {
 
 		Test test = new Test(currentUser, ZonedDateTime.now(), numberOfQuestions);
 
-		System.out.println(test.getTestId());
-		
 		testRepo.save(test);
 
-		System.out.println(test.getTestId());
-		
 		testConfig.generateQuestionsForTest(test);
-		
-		System.out.println(test.getTestId());
 
 		testRepo.save(test);
-		
-		System.out.println(test.getTestId());
-		
+
 		questions = questionRepo.findAllByTest(test);
 
 		model.addAttribute("test", test);
@@ -106,60 +98,49 @@ public class TestController {
 	public String submitTest(@ModelAttribute("test") Test testFromForm, Model model) {
 
 		Long testId = testFromForm.getTestId();
-		
-		if (testId==null) {
+
+		if (testId == null) {
 			return "redirect:/home";
 		}
-		
-		System.out.println(testId);
-		
+
 		Optional<Test> optionalTest = testRepo.findById(testId);
-		
+
 		if (optionalTest.isEmpty()) {
 			return "redirect:/home";
 		}
-		
+
 		Test test = optionalTest.get();
-		
+
 		int score = 0;
 
 		List<Question> submittedQuestions = testFromForm.getQuestions();
-		
-		Map<Long, Question> fullQuestions = submittedQuestions.stream()
-			    .filter(q -> q.getQuestionId() != null)
-			    .map(q -> questionRepo.findById(q.getQuestionId()))
-			    .filter(Optional::isPresent)
-			    .map(Optional::get)
-			    .collect(Collectors.toMap(
-			        Question::getQuestionId,
-			        Function.identity()
-			    ));
+
+		Map<Long, Question> fullQuestions = submittedQuestions.stream().filter(q -> q.getQuestionId() != null)
+				.map(q -> questionRepo.findById(q.getQuestionId())).filter(Optional::isPresent).map(Optional::get)
+				.collect(Collectors.toMap(Question::getQuestionId, Function.identity()));
 
 		for (Question question : submittedQuestions) {
 
 			Question full = fullQuestions.getOrDefault(question.getQuestionId(), null);
-			
-			if (full==null) {
+
+			if (full == null) {
 				continue;
 			}
-			
+
 			full.setGivenAnswer(question.getGivenAnswer());
-			
-    		if (full.checkAnswer()) {
-    			score = score + 1;
-    		}
-    		
-    		
+
+			if (full.checkAnswer()) {
+				score = score + 1;
+			}
 
 		}
 
-//		System.out.println(score);
 		test.setNumberCorrect(score);
-		
+
 		test.setEndDateTime(ZonedDateTime.now());
-		
+
 		testRepo.save(test);
-		
+
 		return "redirect:/viewResults";
 
 	}

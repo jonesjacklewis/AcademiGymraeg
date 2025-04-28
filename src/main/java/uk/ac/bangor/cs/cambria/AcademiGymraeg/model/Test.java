@@ -34,11 +34,11 @@ public class Test {
 	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
 	@NotNull
-	@Column(nullable = false, updatable = false)
+	@Column(nullable = false, updatable = true)
 	private ZonedDateTime endDateTime;
 
 	@NotNull
-	@Column(nullable = false, updatable = false)
+	@Column(nullable = false, updatable = true)
 	private int numberCorrect;
 
 	@NotNull
