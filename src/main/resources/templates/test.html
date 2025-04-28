@@ -4,7 +4,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="dwp22pzv, jcj23xfb">
+    <meta name="author" content="dwp22pzv, jcj23xfb, cnb22xdk">
     <link href="../css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
     <title>Academi Gymraeg | Take Test</title>
 
@@ -30,10 +30,14 @@
               <h2>Take a Test</h2>
         
 
-              <form th:action="@{/submitTest}" method="GET" th:object="${test}">
+              <form th:action="@{/submitTest}" method="POST" th:object="${test}">
 				<p>QuestionForm</p>
 				
+				<input type="hidden" th:field="*{testId}" />
+				
 				<div class="question-container" th:each="question, iterStat : *{questions}">
+					<input type="hidden" th:field="*{questions[__${iterStat.index}__].questionId}" />
+					
 				    <p th:text="${question.questionString}"></p>
 					
 					<div th:switch="${question.questionType}">
@@ -59,6 +63,8 @@
                 <button type="submit">Submit</button>
 
               </form>
+              
+              
 
         
               <a class="back-link" href="/home">Back</a>

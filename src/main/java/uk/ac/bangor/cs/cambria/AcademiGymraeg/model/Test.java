@@ -23,7 +23,7 @@ import jakarta.validation.constraints.NotNull;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.QuestionRepository;
 
 /**
- * @author thh21bgf, jcj23xfb, dwp22pzv
+ * @author thh21bgf, jcj23xfb, dwp22pzv, cnb22xdk
  */
 
 @Entity
@@ -71,11 +71,21 @@ public class Test {
 	 * @param questionRepo
 	 */
 	@Autowired
-	public void setQuestions(QuestionRepository questionRepo) {
+	public void setQuestionsWithRepo(QuestionRepository questionRepo) {
 		
 		this.questions = questionRepo.findAllByTest(this);
 	}
+	
+	
+	
+	public void setQuestions(List<Question> questions) {
+		
+	    this.questions = questions;
+	    
+	}
 
+	
+	
 	public Test() {
 	}
 	
