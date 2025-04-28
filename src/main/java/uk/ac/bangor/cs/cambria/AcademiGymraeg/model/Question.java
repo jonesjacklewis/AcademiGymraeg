@@ -5,8 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.QuestionConstruction;
@@ -20,11 +20,10 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.questionConstruction.WelshQuestion
  */
 
 @Entity
-
+@Table(name = "question")
 public class Question {
 
 	public Question() {
-
 	}
 
 	public Question(  @NotBlank Noun noun, @NotBlank QuestionType questionType,  Test test) {
@@ -35,21 +34,28 @@ public class Question {
 		generateQuestion();
 	}
 	
+	/**
+	 * Determines the correct answer and the user-readable string of the question, based on the question type.
+	 */
 	private void generateQuestion(){
 
 		QuestionConstruction questionConstructor;
+		String queriedNoun;
 
             switch (this.questionType){
                 case WELSH_TO_ENGLISH ->  {
                      questionConstructor = new EnglishQuestionImpl();
+                     queriedNoun = noun.getWelshNoun();
                      this.correctAnswer = noun.getEnglishNoun();
                     }
                 case ENGLISH_TO_WELSH ->  {
                     questionConstructor = new WelshQuestionImpl();
+                    queriedNoun = noun.getEnglishNoun();
                     this.correctAnswer = noun.getWelshNoun();
                 }
                 case GENDER ->  {
                      questionConstructor = new GenderQuestionImpl();
+                     queriedNoun = noun.getWelshNoun();
                      this.correctAnswer = noun.getGender().name();
                     }
                 default -> {
@@ -57,9 +63,13 @@ public class Question {
                     }
             }
 
-		this.questionString = questionConstructor.constructQuestion(this.noun.toString());
+		this.questionString = questionConstructor.constructQuestion(queriedNoun);
 	}
 
+	/**
+	 * Checks the user-given answer against the stored correct answer.
+	 * @return Boolean True if the given answer matches the correct answer, false if not.
+	 */
 	public Boolean checkAnswer(){
 		if (this.givenAnswer.isEmpty() || this.givenAnswer.isBlank()){
 			return false;
@@ -79,7 +89,7 @@ public class Question {
 	@Id
 	@GeneratedValue
 	@Column(nullable = false, updatable = false)
-	@NotBlank
+	@NotNull
 	private Long questionId;
 
 	/**
@@ -93,7 +103,7 @@ public class Question {
 	 * Noun attribute, the Noun object used by the question.
 	 */
 	@JoinColumn(nullable = false)
-	@NotBlank
+	@NotNull
 	@ManyToOne
 	private Noun noun;
 
@@ -102,7 +112,7 @@ public class Question {
 	 * to Welsh, Welsh to English, or Gender.
 	 */
 	@Column(nullable = false)
-	@NotBlank
+	@NotNull
 	private QuestionType questionType;
 
 	/**
@@ -129,10 +139,6 @@ public class Question {
 	}
     public Long getQuestionId() {
         return questionId;
-    }
-
-    public Long getId() {
-        return questionId;//!!
     }
 
     public String getQuestionString() {

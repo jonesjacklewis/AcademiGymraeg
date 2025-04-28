@@ -29,7 +29,7 @@ public class Noun {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(nullable = false, updatable = false)
-	private Long nounId;
+	private Long id;
 
 	/**
 	 * welshNoun attribute. The Welsh language representation of the Noun.
@@ -96,12 +96,12 @@ public class Noun {
 	}
 
 	public void setNounId(Long nounId) {
-		this.nounId = nounId;
+		this.id = nounId;
 	}
 
 	
 	public Long getNounId() {
-		return nounId;
+		return id;
 	}
 
 	@Override

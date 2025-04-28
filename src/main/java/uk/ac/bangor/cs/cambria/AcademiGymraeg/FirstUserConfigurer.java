@@ -22,17 +22,17 @@ public class FirstUserConfigurer {
 
 	@PostConstruct
 	void setupFirstUser() {
-		if (!repo.findByEmailAddress("admin@academigymraeg.com").isEmpty()) {
+		if (!repo.findByEmailAddress("super@academigymraeg.com").isEmpty()) {
 			return;
 		}
 
 		User u = new User();
 
 		u.setAdmin(true);
-		u.setInstructor(false);
+		u.setInstructor(true);
 		u.setPassword(encoder.encode("password123!"));
-		u.setForename("admin");
-		u.setUsername("admin@academigymraeg.com");
+		u.setForename("super");
+		u.setUsername("super@academigymraeg.com");
 
 		repo.save(u);
 	}
@@ -67,6 +67,23 @@ public class FirstUserConfigurer {
 		u.setPassword(encoder.encode("password789!"));
 		u.setForename("student1");
 		u.setUsername("student1@academigymraeg.com");
+
+		repo.save(u);
+	}
+	
+	@PostConstruct
+	void setupFourthUser() {
+		if (!repo.findByEmailAddress("admin@academigymraeg.com").isEmpty()) {
+			return;
+		}
+
+		User u = new User();
+
+		u.setAdmin(true);
+		u.setInstructor(false);
+		u.setPassword(encoder.encode("password012!"));
+		u.setForename("admin");
+		u.setUsername("admin@academigymraeg.com");
 
 		repo.save(u);
 	}
