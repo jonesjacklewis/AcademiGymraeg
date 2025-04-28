@@ -31,11 +31,11 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.util.UserService;
 @RequestMapping("/noun")
 public class NounController {
 	
-	@Autowired
-    private UserService userService; //Get logged in user details	
+	@Autowired 
+	public UserService userService; //Get logged in user details	
 	
-	@Autowired
-	private NounService nounService;
+	@Autowired 
+	public NounService nounService;
 	
 	private List<Gender> genders = Arrays.asList(Gender.values());
 	
@@ -48,6 +48,11 @@ public class NounController {
 	
 	static void setMessage(String message, String type)
 	{
+		if(message.equals(null) | type.equals(null))
+		{
+			throw new IllegalArgumentException("Null argument passed");
+		}
+		
 		switch (type)
 		{
 			case "add":
@@ -128,9 +133,15 @@ public class NounController {
 	 * @apiNote POST requests to "/noun"
 	 */
 	@PostMapping
-	@PreAuthorize("hasRole('INSTRUCTOR')" + " or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('INSTRUCTOR')")
 	public String newNoun(@Valid Noun n, BindingResult result, Model m)  {
 
+
+		if(n == null)
+		{
+			throw new IllegalArgumentException("Null Noun argument");
+		}
+		
 		if (result.hasErrors()) {
 			m.addAttribute("noun", n);
 			return nounAdminPage(m);
@@ -157,8 +168,14 @@ public class NounController {
 	 * @apiNote GET requests to "/noun/deletenoun/{nounID}
 	 */
 	@GetMapping("/deletenoun/{id}")
-	@PreAuthorize("hasRole('INSTRUCTOR')" + " or hasRole('ADMIN')")
-	public String deletenoun(@PathVariable("id") Long id) {
+	@PreAuthorize("hasRole('INSTRUCTOR')")
+	public String deleteNoun(@PathVariable("id") Long id) {
+		
+		if(id == null)
+		{
+			throw new IllegalArgumentException("Null id argument");
+		}
+		
 		Optional<Noun> nounToDelete = nounService.getById(id);
 		
 		if(nounToDelete.isEmpty())
@@ -180,9 +197,15 @@ public class NounController {
 	 * @apiNote  POST requests to "/noun/editnoun"
 	 */
 	@PostMapping("/editnoun")
-	@PreAuthorize("hasRole('INSTRUCTOR')" + " or hasRole('ADMIN')")
-	public String editnoun(@Valid Noun noun, BindingResult result, Model m) {
+	@PreAuthorize("hasRole('INSTRUCTOR')")
+	public String editNoun(@Valid Noun noun, BindingResult result, Model m) {
 
+		if(noun == null)
+		{
+			throw new IllegalArgumentException("Null Noun argument");
+		}
+		
+		
 		if (result.hasErrors()) {
 			m.addAttribute("noun", noun);
 			return nounEditPage(noun.getNounId(), m);
@@ -211,14 +234,18 @@ public class NounController {
 	 * @apiNote GET requests to "/noun/editnoun/{nounID}
 	 */
 	@GetMapping("/editnoun/{id}")
-	@PreAuthorize("hasRole('INSTRUCTOR')" + " or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('INSTRUCTOR')")
 	public String nounEditPage(@PathVariable("id") Long id, Model m) {
 
+		if(id == null)
+		{
+			throw new IllegalArgumentException("Null id argument");
+		}
 	
 		Optional<Noun> nounOptional = nounService.getById(id);
 		
 		if(nounOptional.isEmpty()) {
-			return "redirect:/noun";
+			throw new IllegalArgumentException("Unknown Noun Id");
 		}		
 		
 		if (!m.containsAttribute("noun"))

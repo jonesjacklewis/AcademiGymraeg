@@ -40,7 +40,7 @@ public class AcademiGymraegApplication {
 	
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.userDetailsService(userDetailsService)
+		http.userDetailsService(userDetailsService)		
 				.formLogin(
 						form -> form.loginPage("/login").loginProcessingUrl("/login").defaultSuccessUrl("/home", true))
 				.logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET")))

@@ -32,16 +32,31 @@ public class NounService {
 	
 	public void saveRecord(Noun n)
 	{
+		if(n == null)
+		{
+			throw new IllegalArgumentException("Null Noun argument");
+		}
+		
 		repo.save(n);
 	}
 	
 	public Optional<Noun> getById(Long id)
 	{
+		if(id == null)
+		{
+			throw new IllegalArgumentException("Null id argument");
+		}
+		
 		return repo.findById(id);
 	}
 	
 	public void deleteById(Long id)
 	{
+		if(id == null)
+		{
+			throw new IllegalArgumentException("Null id argument");
+		}
+		
 		repo.deleteById(id);
 	}
 }
