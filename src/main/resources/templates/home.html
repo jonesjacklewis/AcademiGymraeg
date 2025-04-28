@@ -27,7 +27,12 @@
 			<div id="welcome">
 				<p>Welcome <span th:text="${forename}"></span>!</p>
 				
-				<a href="/test" id="take-test-button">Take Test</a>
+				<a href="/test" id="take-test-button" th:if="${errorMessage == null}">Take Test</a>
+
+				<div th:if="${errorMessage}">
+				    <p class="error-message" th:text="${errorMessage}"></p>
+				</div>
+
 			</div>
 		</div>
 	</div>	
