@@ -199,6 +199,22 @@ a.delete-button {
 	width: 200px;
 }
 
+#top-grid {
+	display: flex;
+    justify-content: start;
+}
+
+
+#confirmmessageblock {
+	color: green;
+    align-content: center;
+    align-self: anchor-center;
+    padding: 1vw;
+    margin-left: 10vw;
+    font-size: large;
+}
+
+
 /* USER ADMIN PAGE SPECIFIC CSS */
 #add-user-container {
 	width: 500px;

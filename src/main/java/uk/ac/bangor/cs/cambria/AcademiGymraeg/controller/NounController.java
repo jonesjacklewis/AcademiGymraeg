@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import jakarta.validation.Valid;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.enums.Gender;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.Noun;
-import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.NounRepository;
+import uk.ac.bangor.cs.cambria.AcademiGymraeg.util.NounService;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.util.UserService;
 
 /**
@@ -31,12 +31,12 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.util.UserService;
 @RequestMapping("/noun")
 public class NounController {
 	
-	@Autowired
-    private UserService userService; //Get logged in user details
+	@Autowired 
+	public UserService userService; //Get logged in user details	
 	
-	@Autowired
-	private NounRepository repo;
-
+	@Autowired 
+	public NounService nounService;
+	
 	private List<Gender> genders = Arrays.asList(Gender.values());
 	
 	public static String addConfirmationMessage = "";
@@ -45,6 +45,35 @@ public class NounController {
 	
 	public static String deleteConfirmationMessage = "";
 
+	
+	static void setMessage(String message, String type)
+	{
+		if(message.equals(null) | type.equals(null))
+		{
+			throw new IllegalArgumentException("Null argument passed");
+		}
+		
+		switch (type)
+		{
+			case "add":
+				addConfirmationMessage = message;
+			break;
+			case "edit":
+				editConfirmationMessage = message;
+			break;
+			case "delete":
+				deleteConfirmationMessage = message;
+			break;
+		}
+		
+	}
+	
+	static void clearMessages()
+	{
+		addConfirmationMessage = "";
+		editConfirmationMessage = "";
+		deleteConfirmationMessage = "";
+	}
 	
 	/**
 	 * @param m - Springboot model
@@ -62,36 +91,35 @@ public class NounController {
         boolean isAdmin = userService.isLoggedInUserAdmin();
         boolean isInstructor = userService.isLoggedInUserInstructor();
 
+        if(userId != null)
+        {
+        
         // Add each attribute to the model separately
         m.addAttribute("userId", userId);
         m.addAttribute("forename", forename);
         m.addAttribute("email", email);
         m.addAttribute("isAdmin", isAdmin);
         m.addAttribute("isInstructor", isInstructor);
-		
+        }
+        else
+        {
+        	throw new IllegalArgumentException("Unable to get logged in user");
+        }
+        
+        
 		if (!m.containsAttribute("noun"))
 			m.addAttribute("noun", new Noun());
 		
-		if(!addConfirmationMessage.isBlank())
-		{
-			m.addAttribute("addconfirmationmessage", addConfirmationMessage);
-			addConfirmationMessage = "";
-		}
-		else if(!editConfirmationMessage.isBlank())
-		{
-			m.addAttribute("editconfirmationmessage", editConfirmationMessage);
-			editConfirmationMessage = "";
-		}
-		else if(!deleteConfirmationMessage.isBlank())
-		{
-			m.addAttribute("deleteconfirmationmessage", deleteConfirmationMessage);
-			deleteConfirmationMessage = "";
-		}
+		
+		m.addAttribute("addconfirmationmessage", addConfirmationMessage);				
+		m.addAttribute("editconfirmationmessage", editConfirmationMessage);				
+		m.addAttribute("deleteconfirmationmessage", deleteConfirmationMessage);		
+		clearMessages();		
 		
 		
 		m.addAttribute("genders", genders);
 
-		m.addAttribute("allnouns", repo.findAll());
+		m.addAttribute("allnouns", nounService.getAllNouns());
 
 		return "nounadmin";
 	}
@@ -105,9 +133,15 @@ public class NounController {
 	 * @apiNote POST requests to "/noun"
 	 */
 	@PostMapping
-	@PreAuthorize("hasRole('INSTRUCTOR')" + " or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('INSTRUCTOR')")
 	public String newNoun(@Valid Noun n, BindingResult result, Model m)  {
 
+
+		if(n == null)
+		{
+			throw new IllegalArgumentException("Null Noun argument");
+		}
+		
 		if (result.hasErrors()) {
 			m.addAttribute("noun", n);
 			return nounAdminPage(m);
@@ -118,8 +152,8 @@ public class NounController {
 			n.setEnglishNoun(n.getEnglishNoun().toLowerCase());
 			n.setWelshNoun(n.getWelshNoun().toLowerCase());
 
-			repo.save(n);			
-			addConfirmationMessage = "New noun '"+ n.getWelshNoun() + " | " + n.getEnglishNoun() + "' added.";
+			nounService.saveRecord(n);
+			setMessage("New noun '"+ n.getWelshNoun() + " | " + n.getEnglishNoun() + "' added.", "add");
 			return "redirect:/noun";
 		}
 		
@@ -134,11 +168,23 @@ public class NounController {
 	 * @apiNote GET requests to "/noun/deletenoun/{nounID}
 	 */
 	@GetMapping("/deletenoun/{id}")
-	@PreAuthorize("hasRole('INSTRUCTOR')" + " or hasRole('ADMIN')")
-	public String deletenoun(@PathVariable("id") Long id) {
-		Noun nounToDelete = repo.findById(id).get();
-		deleteConfirmationMessage = "Noun '" + nounToDelete.getWelshNoun() + " | " + nounToDelete.getEnglishNoun() + "' was deleted.";
-		repo.deleteById(id);
+	@PreAuthorize("hasRole('INSTRUCTOR')")
+	public String deleteNoun(@PathVariable("id") Long id) {
+		
+		if(id == null)
+		{
+			throw new IllegalArgumentException("Null id argument");
+		}
+		
+		Optional<Noun> nounToDelete = nounService.getById(id);
+		
+		if(nounToDelete.isEmpty())
+		{
+			throw new IllegalArgumentException("Unknown Noun Id");
+		}
+		
+		setMessage("Noun '" + nounToDelete.get().getWelshNoun() + " | " + nounToDelete.get().getEnglishNoun() + "' was deleted.", "delete");
+		nounService.deleteById(id);
 		return "redirect:/noun";
 	}
 
@@ -151,23 +197,27 @@ public class NounController {
 	 * @apiNote  POST requests to "/noun/editnoun"
 	 */
 	@PostMapping("/editnoun")
-	@PreAuthorize("hasRole('INSTRUCTOR')" + " or hasRole('ADMIN')")
-	public String editnoun(@Valid Noun noun, BindingResult result, Model m) {
+	@PreAuthorize("hasRole('INSTRUCTOR')")
+	public String editNoun(@Valid Noun noun, BindingResult result, Model m) {
 
+		if(noun == null)
+		{
+			throw new IllegalArgumentException("Null Noun argument");
+		}
+		
+		
 		if (result.hasErrors()) {
 			m.addAttribute("noun", noun);
 			return nounEditPage(noun.getNounId(), m);
 		} else {
 			
-			Noun originalNoun = repo.findById(noun.getNounId()).get();
-			
-			
+						
 			noun.setEnglishNoun(noun.getEnglishNoun().toLowerCase());
 			noun.setWelshNoun(noun.getWelshNoun().toLowerCase());
 
-			repo.save(noun);
+			nounService.saveRecord(noun);
 			
-			editConfirmationMessage = "Changes to noun were saved.";
+			setMessage("Changes to noun were saved.", "edit");
 			
 			m.addAttribute("noun", new Noun());
 
@@ -184,14 +234,18 @@ public class NounController {
 	 * @apiNote GET requests to "/noun/editnoun/{nounID}
 	 */
 	@GetMapping("/editnoun/{id}")
-	@PreAuthorize("hasRole('INSTRUCTOR')" + " or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('INSTRUCTOR')")
 	public String nounEditPage(@PathVariable("id") Long id, Model m) {
 
+		if(id == null)
+		{
+			throw new IllegalArgumentException("Null id argument");
+		}
 	
-		Optional<Noun> nounOptional = repo.findById(id);
+		Optional<Noun> nounOptional = nounService.getById(id);
 		
 		if(nounOptional.isEmpty()) {
-			return "redirect:/noun";
+			throw new IllegalArgumentException("Unknown Noun Id");
 		}		
 		
 		if (!m.containsAttribute("noun"))

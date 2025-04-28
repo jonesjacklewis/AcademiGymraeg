@@ -18,6 +18,7 @@
     <h1>Noun Admin</h1>
 	
 	<h2>Edit Noun</h2>
+
 	<div id="add-noun">
 		<form th:action="@{/noun/editnoun}" method="POST" th:object="${noun}">
 		<input type="hidden" id="id" th:field="*{nounId}"><br>
@@ -52,6 +53,7 @@
 			<button type="submit">Save changes</button>
 		</form>
 	</div>
+
 		
 	<br><br>
 	<a href="/noun">Cancel </a>
