@@ -12,7 +12,7 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.Test;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.QuestionRepository;
 
 /**
- * @author dwp22pzv, jcj23xfb
+ * @author dwp22pzv, jcj23xfb, cnb22xdk
  */
 
 @Component
@@ -45,7 +45,7 @@ public class QuestionConfigurer {
             
             i++;
         }
-        test.setQuestions(repo);
+        test.setQuestionsWithRepo(repo);
     }
     
     /**
@@ -73,7 +73,7 @@ public class QuestionConfigurer {
         }
         
         repo.saveAll(questions);
-        test.setQuestions(repo);
+        test.setQuestionsWithRepo(repo);
     }
 
     /**
@@ -90,6 +90,6 @@ public class QuestionConfigurer {
             
             repo.save(newQuestion);
         }
-        test.setQuestions(repo);
+        test.setQuestionsWithRepo(repo);
     }
 }

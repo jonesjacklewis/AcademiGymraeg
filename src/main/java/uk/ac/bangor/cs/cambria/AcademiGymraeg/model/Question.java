@@ -16,7 +16,7 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.questionConstruction.GenderQuestio
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.questionConstruction.WelshQuestionImpl;
 
 /**
- * @author dwp22pzv
+ * @author dwp22pzv, jcj23xfb, cnb22xdk
  */
 
 @Entity
@@ -71,7 +71,7 @@ public class Question {
 	 * @return Boolean True if the given answer matches the correct answer, false if not.
 	 */
 	public Boolean checkAnswer(){
-		if (this.givenAnswer.isEmpty() || this.givenAnswer.isBlank()){
+		if (this.givenAnswer==null || this.givenAnswer.isEmpty() || this.givenAnswer.isBlank()){
 			return false;
 		}
 
@@ -168,7 +168,10 @@ public class Question {
     public void setGivenAnswer(String givenAnswer) {
         this.givenAnswer = givenAnswer;
     }
-
-
+    
+    public void setQuestionId(Long questionId) {
+        this.questionId = questionId;
+    }
+    
 
 }
