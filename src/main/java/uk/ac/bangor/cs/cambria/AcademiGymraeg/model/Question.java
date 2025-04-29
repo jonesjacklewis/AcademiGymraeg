@@ -1,5 +1,8 @@
 package uk.ac.bangor.cs.cambria.AcademiGymraeg.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,10 +12,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import uk.ac.bangor.cs.cambria.AcademiGymraeg.QuestionConstruction;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.enums.QuestionType;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.questionConstruction.EnglishQuestionImpl;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.questionConstruction.GenderQuestionImpl;
+import uk.ac.bangor.cs.cambria.AcademiGymraeg.questionConstruction.QuestionConstruction;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.questionConstruction.WelshQuestionImpl;
 
 /**
@@ -23,55 +26,103 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.questionConstruction.WelshQuestion
 @Table(name = "question")
 public class Question {
 
+	private static final Logger logger = LoggerFactory.getLogger(Question.class);
+
+	@Id
+	@GeneratedValue
+	@Column(nullable = false, updatable = false)
+	@NotNull
+	private Long questionId;
+
+	@Column(nullable = false)
+	@NotBlank
+	private String questionString;
+
+	@JoinColumn(nullable = false)
+	@NotNull
+	@ManyToOne
+	private Noun noun;
+
+	@Column(nullable = false)
+	@NotNull
+	private QuestionType questionType;
+
+	@Column(nullable = false)
+	@NotBlank
+	private String correctAnswer;
+
+	private String givenAnswer;
+
+	@ManyToOne
+	@NotNull
+	@JoinColumn(nullable = false, updatable = false)
+	private Test test;
+
 	public Question() {
 	}
 
-	public Question(  @NotBlank Noun noun, @NotBlank QuestionType questionType,  Test test) {
+	/**
+	 * 
+	 * Constructor which then populates the Question correctly
+	 * 
+	 * @param noun         The {@link Noun} object to use for the question
+	 * @param questionType The {@link QuestionType} that the question will be
+	 * @param test         The {@link Test} the question will belong to
+	 */
+	public Question(@NotBlank Noun noun, @NotBlank QuestionType questionType, Test test) {
 		this.noun = noun;
 		this.questionType = questionType;
 		this.test = test;
 
 		generateQuestion();
 	}
-	
+
 	/**
-	 * Determines the correct answer and the user-readable string of the question, based on the question type.
+	 * 
+	 * Generates the full Question object
+	 * 
+	 * @throws {@link IllegalArgumentException} if the {@link QuestionType} is not
+	 *                recognised
+	 * 
 	 */
-	private void generateQuestion(){
+	private void generateQuestion() {
 
 		QuestionConstruction questionConstructor;
 		String queriedNoun;
 
-            switch (this.questionType){
-                case WELSH_TO_ENGLISH ->  {
-                     questionConstructor = new EnglishQuestionImpl();
-                     queriedNoun = noun.getWelshNoun();
-                     this.correctAnswer = noun.getEnglishNoun();
-                    }
-                case ENGLISH_TO_WELSH ->  {
-                    questionConstructor = new WelshQuestionImpl();
-                    queriedNoun = noun.getEnglishNoun();
-                    this.correctAnswer = noun.getWelshNoun();
-                }
-                case GENDER ->  {
-                     questionConstructor = new GenderQuestionImpl();
-                     queriedNoun = noun.getWelshNoun();
-                     this.correctAnswer = noun.getGender().name();
-                    }
-                default -> {
-                     throw new IllegalArgumentException("Unrecognised question type " + this.questionType);
-                    }
-            }
+		switch (this.questionType) {
+		case WELSH_TO_ENGLISH -> {
+			questionConstructor = new EnglishQuestionImpl();
+			queriedNoun = noun.getWelshNoun();
+			this.correctAnswer = noun.getEnglishNoun();
+		}
+		case ENGLISH_TO_WELSH -> {
+			questionConstructor = new WelshQuestionImpl();
+			queriedNoun = noun.getEnglishNoun();
+			this.correctAnswer = noun.getWelshNoun();
+		}
+		case GENDER -> {
+			questionConstructor = new GenderQuestionImpl();
+			queriedNoun = noun.getWelshNoun();
+			this.correctAnswer = noun.getGender().name();
+		}
+		default -> {
+			logger.error(this.questionString + " is not recognised");
+			throw new IllegalArgumentException("Unrecognised question type " + this.questionType);
+		}
+		}
 
 		this.questionString = questionConstructor.constructQuestion(queriedNoun);
 	}
 
 	/**
-	 * Checks the user-given answer against the stored correct answer.
-	 * @return Boolean True if the given answer matches the correct answer, false if not.
+	 * 
+	 * Checks that the {@link Question} has been answered correctly
+	 * 
+	 * @return a {@link Boolean} showing true if the answer was correct, else false
 	 */
-	public Boolean checkAnswer(){
-		if (this.givenAnswer==null || this.givenAnswer.isEmpty() || this.givenAnswer.isBlank()){
+	public Boolean checkAnswer() {
+		if (this.givenAnswer == null || this.givenAnswer.isEmpty() || this.givenAnswer.isBlank()) {
 			return false;
 		}
 
@@ -81,97 +132,45 @@ public class Question {
 		return sanitisedGivenAnswer.equals(sanitisedCorrectAnswer);
 	}
 
-	/**
-	 * Id attribute. The unique identifier for each Question object, and the primary
-	 * key for the Question TABLE in the database. The value will be autogenerated,
-	 * and cannot be updated once created.
-	 */
-	@Id
-	@GeneratedValue
-	@Column(nullable = false, updatable = false)
-	@NotNull
-	private Long questionId;
-
-	/**
-	 * Question attribute. The string containing the actual question being asked.
-	 */
-	@Column(nullable = false)
-	@NotBlank
-	private String questionString;
-
-	/**
-	 * Noun attribute, the Noun object used by the question.
-	 */
-	@JoinColumn(nullable = false)
-	@NotNull
-	@ManyToOne
-	private Noun noun;
-
-	/**
-	 * QuestionType attribute. Represents the type of this question, either English
-	 * to Welsh, Welsh to English, or Gender.
-	 */
-	@Column(nullable = false)
-	@NotNull
-	private QuestionType questionType;
-
-	/**
-	 * correctAnswer attribute. The string containing the correct answer to the
-	 * question.
-	 */
-	@Column(nullable = false)
-	@NotBlank
-	private String correctAnswer;
-
-	/**
-	 * givenAnswer attribute. The string containing the answer provided by the user
-	 */
-	private String givenAnswer;
-
-	@ManyToOne
-	@NotNull
-	@JoinColumn(nullable = false, updatable = false)
-	private Test test;
-
 	@Override
 	public String toString() {
 		return questionString;
 	}
-    public Long getQuestionId() {
-        return questionId;
-    }
 
-    public String getQuestionString() {
-        return questionString;
-    }
+	public Long getQuestionId() {
+		return questionId;
+	}
 
-    public Noun getNoun() {
-        return noun;
-    }
+	public String getQuestionString() {
+		return questionString;
+	}
 
-    public QuestionType getQuestionType() {
-        return questionType;
-    }
+	public Noun getNoun() {
+		return noun;
+	}
 
-    public String getCorrectAnswer() {
-        return correctAnswer;
-    }
+	public QuestionType getQuestionType() {
+		return questionType;
+	}
 
-    public String getGivenAnswer() {
-        return givenAnswer;
-    }
+	public String getCorrectAnswer() {
+		return correctAnswer;
+	}
 
-    public Test getTest() {
-        return test;
-    }
+	public String getGivenAnswer() {
+		return givenAnswer;
+	}
 
-    public void setGivenAnswer(String givenAnswer) {
-        this.givenAnswer = givenAnswer;
-    }
-    
-    public void setQuestionId(Long questionId) {
-        this.questionId = questionId;
-    }
-    
+	public Test getTest() {
+		return test;
+	}
+
+	public void setGivenAnswer(String givenAnswer) {
+		this.givenAnswer = givenAnswer;
+	}
+
+	public void setQuestionId(Long questionId) {
+		this.questionId = questionId;
+	}
 
 }

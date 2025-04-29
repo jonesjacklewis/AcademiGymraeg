@@ -1,7 +1,6 @@
 package uk.ac.bangor.cs.cambria.AcademiGymraeg.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -10,14 +9,10 @@ import static org.mockito.Mockito.when;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.Result;
-import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.User;
-import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.UserRepository;
 
 class ResultsServiceTests {
 
@@ -170,13 +165,13 @@ class ResultsServiceTests {
 		when(mockTest.getNumberCorrect()).thenReturn(numberCorrect);
 
 		List<uk.ac.bangor.cs.cambria.AcademiGymraeg.model.Test> tests = List.of(mockTest);
-		
+
 		List<Result> results = rs.convertTestsToResults(tests);
-		
+
 		assertEquals(1, results.size());
-		
+
 		Result result = results.get(0);
-		
+
 		assertEquals(start, result.getStartDateTime());
 		assertEquals(end, result.getEndDateTime());
 		assertEquals("00:02:00.000", result.getCompletionDuration());

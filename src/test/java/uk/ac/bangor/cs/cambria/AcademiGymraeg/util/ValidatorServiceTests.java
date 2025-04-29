@@ -9,7 +9,6 @@ import static org.mockito.Mockito.when;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.User;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.UserRepository;
@@ -38,7 +37,7 @@ class ValidatorServiceTests {
 	void countOccurences_nonAlpha() {
 		assertEquals(1, validatorService.countCharOccurencesInString("hello@mail.me", '@'));
 	}
-	
+
 	@Test
 	void countOccurences_nullString() {
 		assertEquals(0, validatorService.countCharOccurencesInString(null, '@'));

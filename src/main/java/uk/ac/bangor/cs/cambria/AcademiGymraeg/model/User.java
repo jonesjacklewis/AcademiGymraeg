@@ -28,44 +28,44 @@ public class User implements UserDetails {
 
 	private static final long serialVersionUID = 1877944497437890869L;
 
-	/* User's unique account ID */
 	@Id
 	@Column(updatable = false)
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long userId;
 
-	/* User's email address */
 	@Column(nullable = false, updatable = true)
 	@NotBlank
 	@Email
 	@Size(max = 320)
 	private String emailAddress;
 
-	/* User's first name */
 	@Column(nullable = false, updatable = true)
 	@NotBlank
 	@Size(max = 64)
 	private String forename;
 
-	/* User's password */
 	@Column(nullable = false)
 	@NotBlank
 	private String password;
 
-	/* Is the user an administrator? */
 	@Column(nullable = false)
 	private boolean admin = false;
 
-	/* Is the user an instructor? */
 	@Column(nullable = false)
 	private boolean instructor = false;
 
+	// set to epoch so show the user has not got an ongoing test
 	@Column
 	private Instant testStartTimestamp = Instant.EPOCH;
 
-	/*
-	 * Assigns specified access to user accounts based on if they are an
-	 * administrator and/or instructor. Overrides existing default method
+	/**
+	 * Returns the authorities granted to the user.
+	 * 
+	 * Adds "ROLE_ADMIN" if the user has admin privileges and "ROLE_INSTRUCTOR" if
+	 * the user has instructor privileges.
+	 * 
+	 * @return a {@link Collection} of {@link GrantedAuthority} objects representing
+	 *         the user's roles
 	 */
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -88,7 +88,6 @@ public class User implements UserDetails {
 		this.userId = userId;
 	}
 
-	/* Overrides existing default method */
 	@Override
 	public String getUsername() {
 		return emailAddress;
@@ -106,7 +105,6 @@ public class User implements UserDetails {
 		this.forename = forename;
 	}
 
-	/* Overrides existing default method */
 	@Override
 	public String getPassword() {
 		return password;
@@ -140,11 +138,26 @@ public class User implements UserDetails {
 		this.testStartTimestamp = testStartTimetamp;
 	}
 
+	/**
+	 * 
+	 * 
+	 * Returns whether a user can start a test.
+	 * 
+	 * Can start a test if the testStartTimestamp is the EPOCH or thirty minutes.
+	 * 
+	 * @return boolean value of true if they can start a test, else false.
+	 */
 	public boolean canStartNewTest() {
 		Instant now = Instant.now();
 		return testStartTimestamp.equals(Instant.EPOCH) || now.minusSeconds(30 * 60).isAfter(testStartTimestamp);
 	}
 
+	/**
+	 * 
+	 * Returns the {@link Instant} that the next test can be started
+	 * 
+	 * @return the {@link Instant} that the next test can be started
+	 */
 	public Instant getNextTestStartTime() {
 		if (this.canStartNewTest()) {
 			return Instant.now();
