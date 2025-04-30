@@ -13,6 +13,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.enums.Gender;
+import jakarta.validation.constraints.Size;
 
 /**
  * @author ptg22svs, cnb22xdk, jcj23xfb
@@ -34,6 +35,7 @@ public class Noun {
 	@Pattern(regexp = "^[\\p{L} '\\-]+$")
 	@NotBlank
 	@Column(nullable = false)
+	@Size(max = 64)
 	private String welshNoun;
 
 	/**
@@ -44,6 +46,7 @@ public class Noun {
 	@Pattern(regexp = "^[\\p{L} '\\-]+$")
 	@NotBlank
 	@Column(nullable = false)
+	@Size(max = 64)
 	private String englishNoun;
 
 	@NotNull

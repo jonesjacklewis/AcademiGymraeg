@@ -24,14 +24,14 @@
 		<input type="hidden" id="id" th:field="*{nounId}"><br>
 			<div>
 			<label for="englishnoun">English noun: </label>
-			<input type="text" id="englishnoun" th:field="*{englishNoun}"><br>
+			<input type="text" id="englishnoun" th:field="*{englishNoun}" maxlength="64"><br>
 			<th:block th:each="e : ${#fields.errors('englishNoun')}">
 				<span style="color: red"><th:block
 						th:text="${e}"></th:block></span>
 				<br />
 			</th:block>
 			<label for="welshnoun">Welsh noun: </label>
-			<input type="text" id="welshnoun" th:field="*{welshNoun}"><br>		
+			<input type="text" id="welshnoun" th:field="*{welshNoun}" maxlength="64"><br>		
 			<th:block th:each="e : ${#fields.errors('welshNoun')}">
 				<span style="color: red"><th:block
 						th:text="${e}"></th:block></span>

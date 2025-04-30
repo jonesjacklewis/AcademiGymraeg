@@ -1,59 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="author" content="grs22lkc">
 	<link href="../css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
-    <title>Academi Gymraeg | Add new user</title>
+	<title>Academi Gymraeg | Add new user</title>
 </head>
+
 <body>
-    <div id="header">
-	    <img id="logo" th:src="@{/images/logo.png}" alt="Academi Gymraeg Logo">
-	    <a href="/logout" id="logout">Log Out </a>
+	<div id="header">
+		<img id="logo" th:src="@{/images/logo.png}" alt="Academi Gymraeg Logo">
+		<a href="/logout" id="logout">Log Out </a>
 	</div>
 	<div id="nav-bar">
 		<a href="/home" id="nav-link-home">Welcome</a>
 		<a href="/test" id="nav-link-test">Take Test</a>
 		<a href="/viewResults" id="nav-link-results">View Results</a>
-    	<a th:if="${isAdmin}" href="/viewusers" id="nav-link-viewusers">View Users</a>
-    	<a th:if="${isAdmin}" href="/addUser" id="nav-link-users" th:style="'color: red; background-color: white'">User Admin</a>
-    	<a th:if="${isInstructor}" href="/noun" id="nav-link-nouns">Noun Admin</a>
+		<a th:if="${isAdmin}" href="/viewusers" id="nav-link-viewusers">View Users</a>
+		<a th:if="${isAdmin}" href="/addUser" id="nav-link-users" th:style="'color: red; background-color: white'">Add User</a>
+		<a th:if="${isInstructor}" href="/noun" id="nav-link-nouns">Noun Admin</a>
 	</div>
-	
+
 	<div id="container">
-		
-	
+
+
 		<h1>Add New User</h1>
-			<div id="add-user-container">
-			    <div id="addUserGroup">
-			        <form th:action="@{/addUser}" method="post">
-			            <label for="forename">Forename: </label>
-			            <input type="text" name="forename" id="forename" placeholder="Forename" required><br><br>
-			            <label for="username">Email: </label>
-			            <input type="text" name="username" id="username" placeholder="Email" required><br><br>
-											
-						<label>Select user role(s):</label>
-						<input type="checkbox" id="admin" name="admin" value="True">Administrator <input type="checkbox" id="instructor" name="instructor" value="True"> Instructor<br><br>
-						
-			            <label for="password">Password: </label>
-			            <input type="password" name="password" id="password" placeholder="Password" required><br><br>
-			
-			            <button type="submit">Register User</button>
-			        </form>
-					
-					<p th:if="${addconfirmationmessage != null and !addconfirmationmessage.isEmpty()}" 
-					   th:text="${addconfirmationmessage}" 
-					   style="color: green;"></p>
-					   
-					   <p th:if="${addErrorMessage != null and !addErrorMessage.isEmpty()}" 
-					      th:text="${addErrorMessage}" 
-					      style="color: red;"></p>
-			
-			
-			    </div>
+		<div id="add-user-container">
+			<div id="addUserGroup">
+				<form th:action="@{/addUser}" method="post">
+					<label for="forename">Forename: </label>
+					<input type="text" name="forename" id="forename" placeholder="Forename" required
+						maxlength="64"><br><br>
+					<label for="username">Email: </label>
+					<input type="text" name="username" id="username" placeholder="Email" required
+						maxlength="320"><br><br>
+
+					<label>Select user role(s):</label>
+					<input type="checkbox" id="admin" name="admin" value="True">Administrator <input type="checkbox"
+						id="instructor" name="instructor" value="True"> Instructor<br><br>
+
+					<label for="password">Password: </label>
+					<input type="password" name="password" id="password" placeholder="Password" required
+						maxlength="256"><br><br>
+
+					<button type="submit">Register User</button>
+				</form>
+
+				<p th:if="${addconfirmationmessage != null and !addconfirmationmessage.isEmpty()}"
+					th:text="${addconfirmationmessage}" style="color: green;"></p>
+
+				<p th:if="${addErrorMessage != null and !addErrorMessage.isEmpty()}" th:text="${addErrorMessage}"
+					style="color: red;"></p>
+
+
 			</div>
+		</div>
 	</div>
 
 </body>
+
 </html>

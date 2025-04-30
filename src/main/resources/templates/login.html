@@ -24,10 +24,10 @@
 				<div id="logInGroup">
 			        <form th:action="@{/login}" method="post">
 			            <label for="username">Email:</label><br>
-			            <input type="text" name="username" id="username" placeholder="Enter your username/email" required><br>
+			            <input type="text" name="username" id="username" placeholder="Enter your username/email" required maxlength="320"><br>
 			            
 			            <label for="password">Password:</label><br>
-			            <input type="password" name="password" id="password" placeholder="Enter your password" required><br>
+			            <input type="password" name="password" id="password" placeholder="Enter your password" required maxlength="256"><br>
 			    
 			            <button type="submit">Log In</button>
 			        </form>
