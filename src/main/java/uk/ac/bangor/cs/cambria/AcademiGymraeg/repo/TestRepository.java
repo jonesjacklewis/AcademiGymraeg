@@ -12,7 +12,14 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.User;
  * @author thh21bgf, jcj23xfb
  */
 
- @Repository
-public interface TestRepository extends JpaRepository<Test, Long>{
-	List<Test> findAllByUser(User u);
+@Repository
+public interface TestRepository extends JpaRepository<Test, Long> {
+	/**
+	 * 
+	 * Returns a {@link List} of {@link Test} for a given {@link User}
+	 * 
+	 * @param user a {@link User} to find a {@link List} of {@link Test} for
+	 * @return a {@link List} of {@link Test} for the {@link User}
+	 */
+	List<Test> findAllByUser(User user);
 }

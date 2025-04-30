@@ -14,5 +14,12 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.Test;
 
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Long> {
-    List<Question> findAllByTest(Test test);
+	/**
+	 * 
+	 * Returns a {@link List} of {@link Question} for a given {@link Test}
+	 * 
+	 * @param test a {@link Test} to find a {@link List} of {@link Question} for
+	 * @return a {@link List} of {@link Question} for the {@link Test}
+	 */
+	List<Question> findAllByTest(Test test);
 }

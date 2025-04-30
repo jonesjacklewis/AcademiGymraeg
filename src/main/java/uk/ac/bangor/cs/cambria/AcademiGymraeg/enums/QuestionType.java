@@ -1,16 +1,12 @@
 package uk.ac.bangor.cs.cambria.AcademiGymraeg.enums;
 
 /**
+ * Represents the types of question that may be asked.
+ * 
+ * 
  * @author dwp22pzv
  */
-
-/**
- * This enum is used to classify the type of a question. 
- * In the database, this classification will be represented by a tinyint column, in the Question table.
- */
 public enum QuestionType {
-		ENGLISH_TO_WELSH,
-		WELSH_TO_ENGLISH,
-		GENDER
+	ENGLISH_TO_WELSH, WELSH_TO_ENGLISH, GENDER
 
-} 
+}

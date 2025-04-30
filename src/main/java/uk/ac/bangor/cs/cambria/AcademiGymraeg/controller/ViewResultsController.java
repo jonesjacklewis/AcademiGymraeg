@@ -1,11 +1,10 @@
 package uk.ac.bangor.cs.cambria.AcademiGymraeg.controller;
 
-import java.time.Instant;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,50 +26,63 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.util.UserService;
 @Controller
 @RequestMapping("/viewResults")
 public class ViewResultsController {
-	
-	@Autowired
-    private UserService userService; //Get logged in user details
 
 	@Autowired
-	private TestRepository testRepo;
+	UserService userService; // Get logged in user details
 
 	@Autowired
-	private UserRepository userRepo;
+	TestRepository testRepo;
 
 	@Autowired
-	private ResultsService rs;
+	UserRepository userRepo;
+
+	@Autowired
+	ResultsService rs;
 
 	public static String editConfirmationMessage = "";
+	private static final Logger logger = LoggerFactory.getLogger(ViewResultsController.class);
 
+	/**
+	 * GET handler for the view results page
+	 * 
+	 * @param m a {@link Model} used to pass attributes to the view
+	 * @return a {@link String} representation of an HTML template
+	 */
 	@GetMapping
-	public String viewUsers(Model m) {
-		
-		// Retrieve individual user attributes
-        Long userId = userService.getLoggedInUserId();
-        String forename = userService.getLoggedInUserForename();
-        String email = userService.getLoggedInUserEmail();
-        boolean isAdmin = userService.isLoggedInUserAdmin();
-        boolean isInstructor = userService.isLoggedInUserInstructor();
+	public String viewResults(Model m) {
 
-        // Add each attribute to the model separately
-        m.addAttribute("userId", userId);
-        m.addAttribute("forename", forename);
-        m.addAttribute("email", email);
-        m.addAttribute("isAdmin", isAdmin);
-        m.addAttribute("isInstructor", isInstructor);
-		
-		Optional<User> optionalU = userRepo.findById(userId);
-		
-		if(optionalU.isEmpty()) {
-			return "home";
+		Long userId = userService.getLoggedInUserId();
+
+		if (userId == null) {
+			logger.debug("User ID is null");
+			return "redirect:/home";
 		}
-		
-		User u = optionalU.get();
-				
-		List<Test> tests = testRepo.findAllByUser(u);
-		
+
+		Optional<User> optionalUser = userRepo.findById(userId);
+
+		if (optionalUser.isEmpty()) {
+			logger.debug("No user for id: " + userId.toString());
+			return "redirect:/home";
+		}
+
+		User user = optionalUser.get();
+
+		String forename = userService.getLoggedInUserForename();
+		String email = userService.getLoggedInUserEmail();
+		boolean isAdmin = userService.isLoggedInUserAdmin();
+		boolean isInstructor = userService.isLoggedInUserInstructor();
+
+		m.addAttribute("userId", userId);
+		m.addAttribute("forename", forename);
+		m.addAttribute("email", email);
+		m.addAttribute("isAdmin", isAdmin);
+		m.addAttribute("isInstructor", isInstructor);
+
+		List<Test> tests = testRepo.findAllByUser(user);
+
+		// Filters out incomplete tests due to how the EPOCH is used - jcj23xfb
 		tests = tests.stream().filter(t -> t.getStartDateTime().isBefore(t.getEndDateTime())).toList();
-		
+
 		List<Result> results = rs.convertTestsToResults(tests);
 
 		m.addAttribute("allresults", results);

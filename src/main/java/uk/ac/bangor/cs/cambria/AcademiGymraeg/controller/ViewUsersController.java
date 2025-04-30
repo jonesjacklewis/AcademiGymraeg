@@ -2,6 +2,8 @@ package uk.ac.bangor.cs.cambria.AcademiGymraeg.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -23,41 +25,51 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.util.UserService;
 public class ViewUsersController {
 
 	@Autowired
-    private UserService userService; //Get logged in user details
-	
-	@Autowired
-	private UserRepository repo;
-	
-	public static String editConfirmationMessage = "";
+	UserService userService; // Get logged in user details
 
+	@Autowired
+	UserRepository repo;
+
+	public static String editConfirmationMessage = "";
+	private static final Logger logger = LoggerFactory.getLogger(ViewUsersController.class);
+
+	/**
+	 * GET handler for the view users page
+	 * 
+	 * @param m a {@link Model} used to pass attributes to the view
+	 * @return a {@link String} representation of an HTML template
+	 */
 	@GetMapping
 	public String viewUsers(Model m) {
-		
-		// Retrieve individual user attributes
-        Long userId = userService.getLoggedInUserId();
-        String forename = userService.getLoggedInUserForename();
-        String email = userService.getLoggedInUserEmail();
-        boolean isAdmin = userService.isLoggedInUserAdmin();
-        boolean isInstructor = userService.isLoggedInUserInstructor();
 
-        // Add each attribute to the model separately
-        m.addAttribute("userId", userId);
-        m.addAttribute("forename", forename);
-        m.addAttribute("email", email);
-        m.addAttribute("isAdmin", isAdmin);
-        m.addAttribute("isInstructor", isInstructor);
-        
-        List<User> allUsers = repo.findAll();
-        allUsers = allUsers.stream().filter(u -> u.getUserId() != userId).toList();
-		
+		Long userId = userService.getLoggedInUserId();
+
+		if (userId == null) {
+			logger.debug("User ID is null");
+			return "redirect:/home";
+		}
+
+		String forename = userService.getLoggedInUserForename();
+		String email = userService.getLoggedInUserEmail();
+		boolean isAdmin = userService.isLoggedInUserAdmin();
+		boolean isInstructor = userService.isLoggedInUserInstructor();
+
+		m.addAttribute("userId", userId);
+		m.addAttribute("forename", forename);
+		m.addAttribute("email", email);
+		m.addAttribute("isAdmin", isAdmin);
+		m.addAttribute("isInstructor", isInstructor);
+
+		List<User> allUsers = repo.findAll();
+		allUsers = allUsers.stream().filter(u -> u.getUserId() != userId).toList();
+
 		m.addAttribute("allusers", allUsers);
-		
-		if(!editConfirmationMessage.isBlank())
-		{
+
+		if (!editConfirmationMessage.isBlank()) {
 			m.addAttribute("editconfirmationmessage", editConfirmationMessage);
 			editConfirmationMessage = "";
 		}
-		
+
 		return "viewusers";
 	}
 

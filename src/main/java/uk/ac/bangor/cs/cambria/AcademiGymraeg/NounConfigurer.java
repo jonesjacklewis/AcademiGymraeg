@@ -4,17 +4,18 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Component;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Component;
 
 import jakarta.annotation.PostConstruct;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.enums.Gender;
@@ -38,17 +39,23 @@ public class NounConfigurer {
 	@Value("classpath:/nouns.csv")
 	Resource csvFile;
 
+	/**
+	 * Loads the default set of nouns from the CSV file
+	 */
 	@PostConstruct
 	void loadNounsFromCsv() {
 		if (repo.count() > 0)
 			return;
 
-		if (csvFile == null)
+		if (csvFile == null) {
+			logger.warn("Unable to load from CSV, as csvFile null");
 			return;
+		}
 
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(csvFile.getInputStream()))) {
 
 			CSVParser parser = format.parse(reader);
+			List<Noun> nouns = new ArrayList<Noun>();
 
 			for (CSVRecord record : parser) {
 				String english = record.get("English").toLowerCase();
@@ -64,9 +71,12 @@ public class NounConfigurer {
 					continue;
 				}
 
-				repo.save(new Noun(english, welsh, gender));
+				nouns.add(new Noun(english, welsh, gender));
 
 			}
+
+			repo.saveAll(nouns);
+			logger.debug("Nouns added to database");
 
 		} catch (FileNotFoundException e) {
 			logger.error("CSV file not found at expected path: {}", csvFile.getFilename(), e);

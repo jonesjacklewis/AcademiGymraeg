@@ -14,33 +14,42 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.User;
-
 /**
  * @author jcj23xfb, grs22lkc
  */
 @SpringBootApplication
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled=true)
+@EnableMethodSecurity(prePostEnabled = true)
 public class AcademiGymraegApplication {
 
 	@Autowired
 	private UserDetailsService userDetailsService;
 
-	
 	public static void main(String[] args) {
 		SpringApplication.run(AcademiGymraegApplication.class, args);
 	}
 
-	/** grs22lkc added this bean to allow retrieval of static files when user not logged in **/
+	/**
+	 * grs22lkc added this bean to allow retrieval of static files when user not
+	 * logged in
+	 **/
 	@Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/css/**", "/js/**", "/images/**");
-    }
-	
+	WebSecurityCustomizer webSecurityCustomizer() {
+		return (web) -> web.ignoring().requestMatchers("/css/**", "/js/**", "/images/**");
+	}
+
+	/**
+	 * 
+	 * Configures security filter chain for application, custom log in, and log out
+	 * handling.
+	 * 
+	 * @param http the {@link HttpSecurity} to modify
+	 * @return the configured {@link SecurityFilterChain} instance
+	 * @throws Exception if an error is caused when configuring security settings
+	 */
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.userDetailsService(userDetailsService)		
+		http.userDetailsService(userDetailsService)
 				.formLogin(
 						form -> form.loginPage("/login").loginProcessingUrl("/login").defaultSuccessUrl("/home", true))
 				.logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET")))
@@ -54,5 +63,4 @@ public class AcademiGymraegApplication {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
 
-	
 }

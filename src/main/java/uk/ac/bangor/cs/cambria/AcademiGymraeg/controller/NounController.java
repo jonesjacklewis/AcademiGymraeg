@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -30,54 +32,63 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.util.UserService;
 @Controller
 @RequestMapping("/noun")
 public class NounController {
-	
-	@Autowired 
-	public UserService userService; //Get logged in user details	
-	
-	@Autowired 
-	public NounService nounService;
-	
-	private List<Gender> genders = Arrays.asList(Gender.values());
-	
-	public static String addConfirmationMessage = "";
-	
-	public static String editConfirmationMessage = "";
-	
-	public static String deleteConfirmationMessage = "";
 
-	
-	static void setMessage(String message, String type)
-	{
-		if(message.equals(null) | type.equals(null))
-		{
+	@Autowired
+	UserService userService; // Get logged in user details
+
+	@Autowired
+	NounService nounService;
+
+	private List<Gender> genders = Arrays.asList(Gender.values());
+
+	public static String addConfirmationMessage = "";
+
+	public static String editConfirmationMessage = "";
+
+	public static String deleteConfirmationMessage = "";
+	private static final Logger logger = LoggerFactory.getLogger(NounController.class);
+
+	/**
+	 * 
+	 * Sets a message property that will be returned to the HTML form
+	 * 
+	 * @param message a {@link String} message to show
+	 * @param type    the type of message as a {@link String}
+	 */
+	static void setMessage(String message, String type) {
+		if (message == null || type == null) {
+			logger.error("No message or type provided");
 			throw new IllegalArgumentException("Null argument passed");
 		}
-		
-		switch (type)
-		{
-			case "add":
-				addConfirmationMessage = message;
+
+		switch (type) {
+		case "add":
+			addConfirmationMessage = message;
 			break;
-			case "edit":
-				editConfirmationMessage = message;
+		case "edit":
+			editConfirmationMessage = message;
 			break;
-			case "delete":
-				deleteConfirmationMessage = message;
+		case "delete":
+			deleteConfirmationMessage = message;
 			break;
 		}
-		
+
 	}
-	
-	static void clearMessages()
-	{
+
+	/**
+	 * Resets the potential message types
+	 */
+	static void clearMessages() {
 		addConfirmationMessage = "";
 		editConfirmationMessage = "";
 		deleteConfirmationMessage = "";
 	}
-	
+
 	/**
-	 * @param m - Springboot model
-	 * @return string indicating html file to serve
+	 * The GET Handler for Noun Controller
+	 * 
+	 * @param m a {@link Model} used to pass attributes to the view
+	 * @return a {@link String} representation of an HTML template
 	 * @apiNote GET requests to "/noun" (Initial request)
 	 */
 	@GetMapping
@@ -85,38 +96,31 @@ public class NounController {
 	public String nounAdminPage(Model m) {
 
 		// Retrieve individual user attributes
-        Long userId = userService.getLoggedInUserId();
-        String forename = userService.getLoggedInUserForename();
-        String email = userService.getLoggedInUserEmail();
-        boolean isAdmin = userService.isLoggedInUserAdmin();
-        boolean isInstructor = userService.isLoggedInUserInstructor();
+		Long userId = userService.getLoggedInUserId();
+		String forename = userService.getLoggedInUserForename();
+		String email = userService.getLoggedInUserEmail();
+		boolean isAdmin = userService.isLoggedInUserAdmin();
+		boolean isInstructor = userService.isLoggedInUserInstructor();
 
-        if(userId != null)
-        {
-        
-        // Add each attribute to the model separately
-        m.addAttribute("userId", userId);
-        m.addAttribute("forename", forename);
-        m.addAttribute("email", email);
-        m.addAttribute("isAdmin", isAdmin);
-        m.addAttribute("isInstructor", isInstructor);
-        }
-        else
-        {
-        	throw new IllegalArgumentException("Unable to get logged in user");
-        }
-        
-        
+		if (userId == null) {
+			logger.error("Logged in user details are not present");
+			throw new IllegalArgumentException("Unable to get logged in user");
+		}
+
+		m.addAttribute("userId", userId);
+		m.addAttribute("forename", forename);
+		m.addAttribute("email", email);
+		m.addAttribute("isAdmin", isAdmin);
+		m.addAttribute("isInstructor", isInstructor);
+
 		if (!m.containsAttribute("noun"))
 			m.addAttribute("noun", new Noun());
-		
-		
-		m.addAttribute("addconfirmationmessage", addConfirmationMessage);				
-		m.addAttribute("editconfirmationmessage", editConfirmationMessage);				
-		m.addAttribute("deleteconfirmationmessage", deleteConfirmationMessage);		
-		clearMessages();		
-		
-		
+
+		m.addAttribute("addconfirmationmessage", addConfirmationMessage);
+		m.addAttribute("editconfirmationmessage", editConfirmationMessage);
+		m.addAttribute("deleteconfirmationmessage", deleteConfirmationMessage);
+		clearMessages();
+
 		m.addAttribute("genders", genders);
 
 		m.addAttribute("allnouns", nounService.getAllNouns());
@@ -124,44 +128,37 @@ public class NounController {
 		return "nounadmin";
 	}
 
-	
 	/**
-	 * @param n - Noun object to add to the datastore
-	 * @param result - Form submission result
-	 * @param m - Springboot model
-	 * @return string indicating redirect target
+	 * @param n      - a {@link Noun} object to add to the datastore
+	 * @param result - Form submission result as a {@link BindingResult}
+	 * @param m      a {@link Model} used to pass attributes to the view
+	 * @return a {@link String} representation of an HTML template
 	 * @apiNote POST requests to "/noun"
 	 */
 	@PostMapping
 	@PreAuthorize("hasRole('INSTRUCTOR')")
-	public String newNoun(@Valid Noun n, BindingResult result, Model m)  {
+	public String newNoun(@Valid Noun n, BindingResult result, Model m) {
 
-
-		if(n == null)
-		{
+		if (n == null) {
+			logger.error("Null noun argument");
 			throw new IllegalArgumentException("Null Noun argument");
 		}
-		
+
 		if (result.hasErrors()) {
+			logger.error("Result contains errors");
 			m.addAttribute("noun", n);
 			return nounAdminPage(m);
-		} else {
-
-			
-	
-			n.setEnglishNoun(n.getEnglishNoun().toLowerCase());
-			n.setWelshNoun(n.getWelshNoun().toLowerCase());
-
-			nounService.saveRecord(n);
-			setMessage("New noun '"+ n.getWelshNoun() + " | " + n.getEnglishNoun() + "' added.", "add");
-			return "redirect:/noun";
 		}
-		
-		
+
+		n.setEnglishNoun(n.getEnglishNoun().toLowerCase());
+		n.setWelshNoun(n.getWelshNoun().toLowerCase());
+
+		nounService.saveRecord(n);
+		setMessage("New noun '" + n.getWelshNoun() + " | " + n.getEnglishNoun() + "' added.", "add");
+		return "redirect:/noun";
 
 	}
 
-	
 	/**
 	 * @param id - Id of Noun that will be deleted
 	 * @return string indicating redirect target
@@ -169,88 +166,80 @@ public class NounController {
 	 */
 	@GetMapping("/deletenoun/{id}")
 	@PreAuthorize("hasRole('INSTRUCTOR')")
-	public String deleteNoun(@PathVariable("id") Long id) {
-		
-		if(id == null)
-		{
+	public String deleteNoun(@PathVariable Long id) {
+
+		if (id == null) {
 			throw new IllegalArgumentException("Null id argument");
 		}
-		
+
 		Optional<Noun> nounToDelete = nounService.getById(id);
-		
-		if(nounToDelete.isEmpty())
-		{
+
+		if (nounToDelete.isEmpty()) {
 			throw new IllegalArgumentException("Unknown Noun Id");
 		}
-		
-		setMessage("Noun '" + nounToDelete.get().getWelshNoun() + " | " + nounToDelete.get().getEnglishNoun() + "' was deleted.", "delete");
+
+		setMessage("Noun '" + nounToDelete.get().getWelshNoun() + " | " + nounToDelete.get().getEnglishNoun()
+				+ "' was deleted.", "delete");
 		nounService.deleteById(id);
 		return "redirect:/noun";
 	}
 
-	
 	/**
-	 * @param noun - Noun object to edit
+	 * @param noun   - Noun object to edit
 	 * @param result - Form submission result
-	 * @param m - Springboot model
+	 * @param m      - Springboot model
 	 * @return string indicating redirect target
-	 * @apiNote  POST requests to "/noun/editnoun"
+	 * @apiNote POST requests to "/noun/editnoun"
 	 */
 	@PostMapping("/editnoun")
 	@PreAuthorize("hasRole('INSTRUCTOR')")
 	public String editNoun(@Valid Noun noun, BindingResult result, Model m) {
 
-		if(noun == null)
-		{
+		if (noun == null) {
 			throw new IllegalArgumentException("Null Noun argument");
 		}
-		
-		
+
 		if (result.hasErrors()) {
 			m.addAttribute("noun", noun);
 			return nounEditPage(noun.getNounId(), m);
-		} else {
-			
-						
-			noun.setEnglishNoun(noun.getEnglishNoun().toLowerCase());
-			noun.setWelshNoun(noun.getWelshNoun().toLowerCase());
-
-			nounService.saveRecord(noun);
-			
-			setMessage("Changes to noun were saved.", "edit");
-			
-			m.addAttribute("noun", new Noun());
-
-			return "redirect:/noun";
 		}
+
+		noun.setEnglishNoun(noun.getEnglishNoun().toLowerCase());
+		noun.setWelshNoun(noun.getWelshNoun().toLowerCase());
+
+		nounService.saveRecord(noun);
+
+		setMessage("Changes to noun were saved.", "edit");
+
+		m.addAttribute("noun", new Noun());
+
+		return "redirect:/noun";
 
 	}
 
-
 	/**
 	 * @param id - id of Noun object to add to the Springboot model
-	 * @param m - Springboot model
+	 * @param m  - Springboot model
 	 * @return string indicating html file to serve
 	 * @apiNote GET requests to "/noun/editnoun/{nounID}
 	 */
 	@GetMapping("/editnoun/{id}")
 	@PreAuthorize("hasRole('INSTRUCTOR')")
-	public String nounEditPage(@PathVariable("id") Long id, Model m) {
+	public String nounEditPage(@PathVariable Long id, Model m) {
 
-		if(id == null)
-		{
+		if (id == null) {
 			throw new IllegalArgumentException("Null id argument");
 		}
-	
+
 		Optional<Noun> nounOptional = nounService.getById(id);
-		
-		if(nounOptional.isEmpty()) {
+
+		if (nounOptional.isEmpty()) {
 			throw new IllegalArgumentException("Unknown Noun Id");
-		}		
-		
+		}
+
 		if (!m.containsAttribute("noun"))
 			m.addAttribute("noun", nounOptional.get());
-		
+
 		m.addAttribute("genders", genders);
 
 		return "nounedit";

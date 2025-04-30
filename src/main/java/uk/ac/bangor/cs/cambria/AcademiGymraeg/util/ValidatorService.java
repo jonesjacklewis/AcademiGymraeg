@@ -1,5 +1,7 @@
 package uk.ac.bangor.cs.cambria.AcademiGymraeg.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.UserRepository;
@@ -11,14 +13,24 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.UserRepository;
 public class ValidatorService {
 
 	private final UserRepository userRepository;
+	private static final Logger logger = LoggerFactory.getLogger(ValidatorService.class);
 
 	public ValidatorService(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
 
+	/**
+	 * 
+	 * Counts the number of times a specific character appears in a {@link String}
+	 * 
+	 * @param str    a {@link String} to count the occurrences in
+	 * @param target a char to count the occurrences of
+	 * @return an integer count of the number of times target appears in str
+	 */
 	public int countCharOccurencesInString(String str, char target) {
 
 		if (str == null) {
+			logger.debug("str is null");
 			return 0;
 		}
 
@@ -32,14 +44,34 @@ public class ValidatorService {
 
 		return count;
 	}
-
+	
+	/**
+	 * 
+	 * Validates an email is both syntactically valid, and is unique
+	 * 
+	 * @param email a {@link String} email to validate
+	 * @return boolean value true if email is valid, else false
+	 */
 	public boolean isValidEmail(String email) {
+		return isValidEmail(email, false);
+	}
+
+
+	/**
+	 * 
+	 * Validates an email is both syntactically valid, and is unique
+	 * 
+	 * @param email a {@link String} email to validate
+	 * @param isEdit a boolean for whether to allow duplicate email e.g., for edit
+	 * @return boolean value true if email is valid, else false
+	 */
+	public boolean isValidEmail(String email, boolean isEdit) {
 
 		if (email == null) {
 			return false;
 		}
 
-		if (!userRepository.findByEmailAddress(email).isEmpty()) {
+		if (!userRepository.findByEmailAddress(email).isEmpty() && !isEdit) {
 			return false;
 		}
 
@@ -66,6 +98,13 @@ public class ValidatorService {
 		return true;
 	}
 
+	/**
+	 * 
+	 * Checks whether a {@link String} password conforms to password criteria
+	 * 
+	 * @param password a {@link String} password to validate
+	 * @return a boolean value of true if the password is valid else false
+	 */
 	public boolean isValidPassword(String password) {
 
 		if (password == null) {

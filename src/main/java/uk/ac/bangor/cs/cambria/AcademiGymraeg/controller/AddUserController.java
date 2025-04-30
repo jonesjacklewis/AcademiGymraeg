@@ -1,5 +1,7 @@
 package uk.ac.bangor.cs.cambria.AcademiGymraeg.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,38 +25,46 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.util.ValidatorService;
 public class AddUserController {
 
 	@Autowired
-    private UserService userService; //Get logged in user details
-	
-	@Autowired
-	private UserRepository repo;
+	UserService userService;
 
 	@Autowired
-	private ValidatorService validator;
-	
+	UserRepository repo;
+
 	@Autowired
-	private PasswordEncoder encoder;
+	ValidatorService validator;
+
+	@Autowired
+	PasswordEncoder encoder;
 
 	public static String addConfirmationMessage = "";
 	public static String addErrorMessage = "";
+	private static final Logger logger = LoggerFactory.getLogger(AddUserController.class);
 
+	/**
+	 * 
+	 * The GET handler for the add new user page
+	 * 
+	 * @param m a {@link Model} used to pass attributes to the view
+	 * @return a {@link String} representation of an HTML template
+	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping("/addUser")
 	public String addUserPage(Model m) {
 
 		// Retrieve individual user attributes
-        Long userId = userService.getLoggedInUserId();
-        String forename = userService.getLoggedInUserForename();
-        String email = userService.getLoggedInUserEmail();
-        boolean isAdmin = userService.isLoggedInUserAdmin();
-        boolean isInstructor = userService.isLoggedInUserInstructor();
+		Long userId = userService.getLoggedInUserId();
+		String forename = userService.getLoggedInUserForename();
+		String email = userService.getLoggedInUserEmail();
+		boolean isAdmin = userService.isLoggedInUserAdmin();
+		boolean isInstructor = userService.isLoggedInUserInstructor();
 
-        // Add each attribute to the model separately
-        m.addAttribute("userId", userId);
-        m.addAttribute("forename", forename);
-        m.addAttribute("email", email);
-        m.addAttribute("isAdmin", isAdmin);
-        m.addAttribute("isInstructor", isInstructor);
-		
+		// Add each attribute to the model separately
+		m.addAttribute("userId", userId);
+		m.addAttribute("forename", forename);
+		m.addAttribute("email", email);
+		m.addAttribute("isAdmin", isAdmin);
+		m.addAttribute("isInstructor", isInstructor);
+
 		if (!addConfirmationMessage.isBlank()) {
 			m.addAttribute("addconfirmationmessage", addConfirmationMessage);
 			addConfirmationMessage = "";
@@ -68,22 +78,34 @@ public class AddUserController {
 		return "add-user";
 	}
 
+	/**
+	 * 
+	 * The POST handler for the add new user page
+	 * 
+	 * @param user       the {@link User} populated from the submitted form
+	 * @param admin      a boolean indicating whether the new user should have admin
+	 *                   privileges
+	 * @param instructor a boolean indicating whether the new user should have
+	 *                   instructor privileges
+	 * @param model      a {@link Model} used to pass attributes to the view
+	 * @return
+	 */
 	@PostMapping("/addUser")
 	public String addUser(@ModelAttribute User user,
-			@RequestParam(value = "admin", required = false, defaultValue = "false") boolean admin,
-			@RequestParam(value = "instructor", required = false, defaultValue = "false") boolean instructor,
-			Model model) {
+			@RequestParam(required = false, defaultValue = "false") boolean admin,
+			@RequestParam(required = false, defaultValue = "false") boolean instructor, Model model) {
 
-		if (!(validator.isValidEmail(user.getUsername()) && validator.isValidPassword(user.getPassword()))) {
+		if (!validator.isValidEmail(user.getUsername()) || !validator.isValidPassword(user.getPassword())) {
+			logger.debug("Unable to add user");
 			addErrorMessage = "Unable to add user";
 			return "redirect:/addUser";
 		}
 
 		user.setAdmin(admin);
 		user.setInstructor(instructor);
-		
+
 		user.setPassword(encoder.encode(user.getPassword()));
-		
+
 		repo.save(user);
 		addConfirmationMessage = "User successfully added";
 		return "redirect:/addUser";
