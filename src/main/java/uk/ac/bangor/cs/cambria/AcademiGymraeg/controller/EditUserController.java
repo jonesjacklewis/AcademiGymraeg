@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jakarta.transaction.Transactional;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.EditUserDTO;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.User;
+import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.TestRepository;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.UserRepository;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.util.ValidatorService;
 
@@ -34,7 +36,10 @@ import uk.ac.bangor.cs.cambria.AcademiGymraeg.util.ValidatorService;
 public class EditUserController {
 
 	@Autowired
-	UserRepository repo;
+	UserRepository userRepo;
+
+	@Autowired
+	TestRepository testRepo;
 
 	@Autowired
 	ValidatorService validator;
@@ -49,7 +54,7 @@ public class EditUserController {
 	@GetMapping("/{id}")
 	public String userEditPage(@PathVariable Long id, Model m) {
 
-		Optional<User> userOptional = repo.findById(id);
+		Optional<User> userOptional = userRepo.findById(id);
 
 		if (userOptional.isEmpty()) {
 			logger.debug("User does not exist");
@@ -112,7 +117,7 @@ public class EditUserController {
 			editedPassword = true;
 		}
 
-		Optional<User> optionalUser = repo.findById(dto.getUserId());
+		Optional<User> optionalUser = userRepo.findById(dto.getUserId());
 
 		if (optionalUser.isEmpty()) {
 			return "redirect:/home";
@@ -129,7 +134,7 @@ public class EditUserController {
 			user.setPassword(dto.getConfirmPassword());
 		}
 
-		repo.save(user);
+		userRepo.save(user);
 
 		ViewUsersController.editConfirmationMessage = "Changes to user '" + user.getUsername() + "' were saved.";
 
@@ -137,4 +142,34 @@ public class EditUserController {
 
 	}
 
+	/**
+	 * 
+	 * Deletes the user by ID
+	 * 
+	 * @param id - {@link Long} id of User object to delete
+	 * @return a {@link String} representation of an HTML template
+	 */
+	@Transactional
+	@GetMapping("/delete/{id}")
+	public String deleteUser(@PathVariable Long id) {
+
+		if (id == null) {
+			logger.debug("User ID null");
+			return "redirect:/viewusers";
+		}
+
+		Optional<User> userOptional = userRepo.findById(id);
+
+		if (userOptional.isEmpty()) {
+			logger.debug("User does not exist");
+			return "redirect:/viewusers";
+		}
+
+		User user = userOptional.get();
+
+		testRepo.deleteAllByUser(user);
+		userRepo.delete(user);
+
+		return "redirect:/viewusers";
+	}
 }

@@ -22,4 +22,12 @@ public interface TestRepository extends JpaRepository<Test, Long> {
 	 * @return a {@link List} of {@link Test} for the {@link User}
 	 */
 	List<Test> findAllByUser(User user);
+
+	/**
+	 * 
+	 * Deletes all tests for a given {@link User}
+	 * 
+	 * @param user a {@link User} whose tests should be deleted
+	 */
+	void deleteAllByUser(User user);
 }

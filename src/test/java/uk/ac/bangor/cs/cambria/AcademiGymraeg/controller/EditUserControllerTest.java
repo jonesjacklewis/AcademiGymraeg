@@ -21,6 +21,7 @@ import org.springframework.validation.BindingResult;
 
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.EditUserDTO;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.model.User;
+import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.TestRepository;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.repo.UserRepository;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.util.ValidatorService;
 
@@ -31,40 +32,43 @@ public class EditUserControllerTest {
 
 	private EditUserController controller;
 
-	private UserRepository mockRepo;
+	private UserRepository mockUserRepo;
+	private TestRepository mockTestRepo;
 	private ValidatorService mockValidator;
 	private Model mockModel;
 	private BindingResult mockBindingResult;
 
 	@BeforeEach
 	void setUp() {
-		mockRepo = mock(UserRepository.class);
+		mockUserRepo = mock(UserRepository.class);
+		mockTestRepo = mock(TestRepository.class);
 		mockValidator = mock(ValidatorService.class);
 		mockBindingResult = mock(BindingResult.class);
 		mockModel = mock(Model.class);
 
 		controller = new EditUserController();
 
-		controller.repo = mockRepo;
+		controller.userRepo = mockUserRepo;
+		controller.testRepo = mockTestRepo;
 		controller.validator = mockValidator;
 	}
 
 	@Test
 	void getHandler_whenNoUserForId() {
-		when(mockRepo.findById(1L)).thenReturn(Optional.empty());
+		when(mockUserRepo.findById(1L)).thenReturn(Optional.empty());
 
 		String viewName = controller.userEditPage(1L, mockModel);
 
 		assertEquals("redirect:/viewusers", viewName);
 
-		verify(mockRepo, times(1)).findById(1L);
+		verify(mockUserRepo, times(1)).findById(1L);
 	}
 
 	@Test
 	void getHandler_whenUserNotInModel() {
 		User user = new User();
 
-		when(mockRepo.findById(1L)).thenReturn(Optional.of(user));
+		when(mockUserRepo.findById(1L)).thenReturn(Optional.of(user));
 
 		String viewName = controller.userEditPage(1L, mockModel);
 		assertEquals("useredit", viewName);
@@ -77,7 +81,7 @@ public class EditUserControllerTest {
 		User user = new User();
 		EditUserDTO dto = new EditUserDTO();
 
-		when(mockRepo.findById(1L)).thenReturn(Optional.of(user));
+		when(mockUserRepo.findById(1L)).thenReturn(Optional.of(user));
 		when(mockModel.containsAttribute("editUserDTO")).thenReturn(true);
 
 		String viewName = controller.userEditPage(1L, mockModel);
@@ -95,7 +99,7 @@ public class EditUserControllerTest {
 		dto.setUserId(1L);
 
 		when(mockBindingResult.hasErrors()).thenReturn(true);
-		when(mockRepo.findById(1L)).thenReturn(Optional.of(user));
+		when(mockUserRepo.findById(1L)).thenReturn(Optional.of(user));
 
 		String viewName = controller.editUser(dto, mockBindingResult, mockModel);
 
@@ -115,7 +119,7 @@ public class EditUserControllerTest {
 		when(mockValidator.isValidEmail(dto.getUsername(), true)).thenReturn(false);
 
 		when(mockBindingResult.hasErrors()).thenReturn(false);
-		when(mockRepo.findById(1L)).thenReturn(Optional.of(user));
+		when(mockUserRepo.findById(1L)).thenReturn(Optional.of(user));
 
 		String viewName = controller.editUser(dto, mockBindingResult, mockModel);
 
@@ -139,7 +143,7 @@ public class EditUserControllerTest {
 		when(mockValidator.isValidEmail(dto.getUsername(), true)).thenReturn(true);
 
 		when(mockBindingResult.hasErrors()).thenReturn(false);
-		when(mockRepo.findById(1L)).thenReturn(Optional.of(user));
+		when(mockUserRepo.findById(1L)).thenReturn(Optional.of(user));
 
 		String viewName = controller.editUser(dto, mockBindingResult, mockModel);
 
@@ -165,7 +169,7 @@ public class EditUserControllerTest {
 		when(mockValidator.isValidPassword(dto.getNewPassword())).thenReturn(false);
 
 		when(mockBindingResult.hasErrors()).thenReturn(false);
-		when(mockRepo.findById(1L)).thenReturn(Optional.of(user));
+		when(mockUserRepo.findById(1L)).thenReturn(Optional.of(user));
 
 		String viewName = controller.editUser(dto, mockBindingResult, mockModel);
 
@@ -191,7 +195,7 @@ public class EditUserControllerTest {
 		when(mockValidator.isValidPassword(dto.getNewPassword())).thenReturn(true);
 
 		when(mockBindingResult.hasErrors()).thenReturn(false);
-		when(mockRepo.findById(1L)).thenReturn(Optional.empty());
+		when(mockUserRepo.findById(1L)).thenReturn(Optional.empty());
 
 		String viewName = controller.editUser(dto, mockBindingResult, mockModel);
 
@@ -217,7 +221,7 @@ public class EditUserControllerTest {
 		when(mockValidator.isValidEmail(dto.getUsername(), true)).thenReturn(true);
 		when(mockValidator.isValidPassword(dto.getNewPassword())).thenReturn(true);
 		when(mockBindingResult.hasErrors()).thenReturn(false);
-		when(mockRepo.findById(1L)).thenReturn(Optional.of(user));
+		when(mockUserRepo.findById(1L)).thenReturn(Optional.of(user));
 
 		String viewName = controller.editUser(dto, mockBindingResult, mockModel);
 
@@ -229,7 +233,39 @@ public class EditUserControllerTest {
 		assertTrue(user.isAdmin());
 		assertFalse(user.isInstructor());
 
-		verify(mockRepo).save(user);
+		verify(mockUserRepo).save(user);
+	}
+
+	@Test
+	void getHandlerDelete_userIdNull() {
+		String viewName = controller.deleteUser(null);
+
+		assertEquals("redirect:/viewusers", viewName);
+	}
+
+	@Test
+	void getHandlerDelete_userNotExists() {
+		when(mockUserRepo.findById(1L)).thenReturn(Optional.empty());
+
+		String viewName = controller.deleteUser(1L);
+
+		assertEquals("redirect:/viewusers", viewName);
+	}
+
+	@Test
+	void getHandlerDelete_success() {
+
+		User u = new User();
+		u.setUserId(1L);
+
+		when(mockUserRepo.findById(1L)).thenReturn(Optional.of(u));
+
+		String viewName = controller.deleteUser(1L);
+
+		verify(mockUserRepo).delete(u);
+		verify(mockTestRepo).deleteAllByUser(u);
+
+		assertEquals("redirect:/viewusers", viewName);
 	}
 
 }

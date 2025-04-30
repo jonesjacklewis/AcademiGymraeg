@@ -43,7 +43,7 @@
 					<th th:text="${u.username}"></th>
 					<th th:text="${u.forename}"></th>
 					<th><a class="edit-button" th:href="@{edituser/{id}(id = ${u.userId})}">EDIT</a>
-					<a class="delete-button" th:href="@{/deleteuser/{id}(id = ${u.userId})}" th:data-user="'Are you sure you wish to delete the user ' + ${u.username} + '?'" th:onclick="return confirm(this.getAttribute('data-user')) ? true : false;">DELETE</a></th>
+					<a class="delete-button" th:href="@{edituser/delete/{id}(id = ${u.userId})}" th:data-user="'Are you sure you wish to delete the user ' + ${u.username} + '?'" th:onclick="return confirm(this.getAttribute('data-user')) ? true : false;">DELETE</a></th>
 				</tr>
 			</table>
 			
