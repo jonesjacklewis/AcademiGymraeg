@@ -12,6 +12,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import uk.ac.bangor.cs.cambria.AcademiGymraeg.enums.Gender;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.enums.QuestionType;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.questionConstruction.EnglishQuestionImpl;
 import uk.ac.bangor.cs.cambria.AcademiGymraeg.questionConstruction.GenderQuestionImpl;
@@ -38,10 +41,31 @@ public class Question {
 	@NotBlank
 	private String questionString;
 
-	@JoinColumn(nullable = false)
+	/**
+	 * Welsh-language representation of the noun.
+	 * 
+	 * Only allows Unicode letters, spaces, apostrophes, and hyphens.
+	 */
+	@Pattern(regexp = "^[\\p{L} '\\-]+$")
+	@NotBlank
+	@Column(nullable = false)
+	@Size(max = 64)
+	private String welshNoun;
+
+	/**
+	 * Enlish-language representation of the noun.
+	 * 
+	 * Only allows Unicode letters, spaces, apostrophes, and hyphens.
+	 */
+	@Pattern(regexp = "^[\\p{L} '\\-]+$")
+	@NotBlank
+	@Column(nullable = false)
+	@Size(max = 64)
+	private String englishNoun;
+
 	@NotNull
-	@ManyToOne
-	private Noun noun;
+	@Column(nullable = false)
+	private Gender gender;
 
 	@Column(nullable = false)
 	@NotNull
@@ -70,7 +94,9 @@ public class Question {
 	 * @param test         The {@link Test} the question will belong to
 	 */
 	public Question(@NotBlank Noun noun, @NotBlank QuestionType questionType, Test test) {
-		this.noun = noun;
+		this.welshNoun = noun.getWelshNoun();
+		this.englishNoun = noun.getEnglishNoun();
+		this.gender = noun.getGender();
 		this.questionType = questionType;
 		this.test = test;
 
@@ -93,18 +119,18 @@ public class Question {
 		switch (this.questionType) {
 		case WELSH_TO_ENGLISH -> {
 			questionConstructor = new EnglishQuestionImpl();
-			queriedNoun = noun.getWelshNoun();
-			this.correctAnswer = noun.getEnglishNoun();
+			queriedNoun = this.welshNoun;
+			this.correctAnswer = this.englishNoun;
 		}
 		case ENGLISH_TO_WELSH -> {
 			questionConstructor = new WelshQuestionImpl();
-			queriedNoun = noun.getEnglishNoun();
-			this.correctAnswer = noun.getWelshNoun();
+			queriedNoun = this.englishNoun;
+			this.correctAnswer = this.welshNoun;
 		}
 		case GENDER -> {
 			questionConstructor = new GenderQuestionImpl();
-			queriedNoun = noun.getWelshNoun();
-			this.correctAnswer = noun.getGender().name();
+			queriedNoun = this.welshNoun;
+			this.correctAnswer = this.gender.name();
 		}
 		default -> {
 			logger.error(this.questionString + " is not recognised");
@@ -143,10 +169,6 @@ public class Question {
 
 	public String getQuestionString() {
 		return questionString;
-	}
-
-	public Noun getNoun() {
-		return noun;
 	}
 
 	public QuestionType getQuestionType() {
