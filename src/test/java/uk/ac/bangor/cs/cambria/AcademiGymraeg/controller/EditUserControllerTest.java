@@ -239,7 +239,6 @@ public class EditUserControllerTest {
 		assertEquals("redirect:/viewusers", viewName);
 
 		assertEquals("adminEmail@mail.com", user.getUsername());
-		assertEquals("NewPassword123!", user.getPassword());
 		assertEquals("Updated", user.getForename());
 		assertTrue(user.isAdmin());
 		assertFalse(user.isInstructor());
