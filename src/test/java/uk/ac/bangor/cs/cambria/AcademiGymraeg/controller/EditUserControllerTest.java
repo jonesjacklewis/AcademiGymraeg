@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
@@ -37,6 +38,7 @@ public class EditUserControllerTest {
 	private ValidatorService mockValidator;
 	private Model mockModel;
 	private BindingResult mockBindingResult;
+	private PasswordEncoder mockEncoder;
 
 	@BeforeEach
 	void setUp() {
@@ -45,21 +47,22 @@ public class EditUserControllerTest {
 		mockValidator = mock(ValidatorService.class);
 		mockBindingResult = mock(BindingResult.class);
 		mockModel = mock(Model.class);
+		mockEncoder = mock(PasswordEncoder.class);
 
 		controller = new EditUserController();
 
 		controller.userRepo = mockUserRepo;
 		controller.testRepo = mockTestRepo;
 		controller.validator = mockValidator;
+		controller.encoder = mockEncoder;
 	}
-	
+
 	@Test
 	void getHandler_invalidGetEndpoint() {
 		String viewName = controller.handleInvalidGet();
 
 		assertEquals("redirect:/viewusers", viewName);
 	}
-	
 
 	@Test
 	void getHandler_whenNoUserForId() {

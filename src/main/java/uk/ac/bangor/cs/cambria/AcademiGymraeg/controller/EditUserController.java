@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -42,9 +43,12 @@ public class EditUserController {
 	TestRepository testRepo;
 
 	@Autowired
+	PasswordEncoder encoder;
+
+	@Autowired
 	ValidatorService validator;
 	private static final Logger logger = LoggerFactory.getLogger(EditUserController.class);
-	
+
 	/**
 	 * 
 	 * Returns to viewusers for invalid get request
@@ -53,9 +57,9 @@ public class EditUserController {
 	 */
 	@GetMapping
 	public String handleInvalidGet() {
-	    return "redirect:/viewusers";
+		return "redirect:/viewusers";
 	}
-	
+
 	/**
 	 * @param id - {@link Long} id of User object to add to the Springboot model
 	 * @param m  - a {@link Model} used to pass attributes to the view
@@ -142,7 +146,7 @@ public class EditUserController {
 		user.setUsername(dto.getUsername());
 
 		if (editedPassword) {
-			user.setPassword(dto.getConfirmPassword());
+			user.setPassword(encoder.encode(dto.getConfirmPassword()));
 		}
 
 		userRepo.save(user);
