@@ -52,6 +52,14 @@ public class EditUserControllerTest {
 		controller.testRepo = mockTestRepo;
 		controller.validator = mockValidator;
 	}
+	
+	@Test
+	void getHandler_invalidGetEndpoint() {
+		String viewName = controller.handleInvalidGet();
+
+		assertEquals("redirect:/viewusers", viewName);
+	}
+	
 
 	@Test
 	void getHandler_whenNoUserForId() {
@@ -148,7 +156,7 @@ public class EditUserControllerTest {
 		String viewName = controller.editUser(dto, mockBindingResult, mockModel);
 
 		verify(mockValidator).isValidEmail(dto.getUsername(), true);
-		verify(mockBindingResult).rejectValue(eq("password"), eq("error.newPassword"),
+		verify(mockBindingResult).rejectValue(eq("confirmPassword"), eq("error.newPassword"),
 				eq("The passwords do not match."));
 		verify(mockModel).addAttribute("user", dto);
 		assertEquals("useredit", viewName);
@@ -174,7 +182,7 @@ public class EditUserControllerTest {
 		String viewName = controller.editUser(dto, mockBindingResult, mockModel);
 
 		verify(mockValidator).isValidEmail(dto.getUsername(), true);
-		verify(mockBindingResult).rejectValue(eq("password"), eq("error.newPassword"), eq(
+		verify(mockBindingResult).rejectValue(eq("confirmPassword"), eq("error.newPassword"), eq(
 				"Password does not meet complexity requirements. Must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one digit, and one special character."));
 		verify(mockModel).addAttribute("user", dto);
 		assertEquals("useredit", viewName);

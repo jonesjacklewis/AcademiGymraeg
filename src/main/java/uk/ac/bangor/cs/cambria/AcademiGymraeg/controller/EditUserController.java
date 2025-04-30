@@ -44,7 +44,18 @@ public class EditUserController {
 	@Autowired
 	ValidatorService validator;
 	private static final Logger logger = LoggerFactory.getLogger(EditUserController.class);
-
+	
+	/**
+	 * 
+	 * Returns to viewusers for invalid get request
+	 * 
+	 * @return a {@link String} representation of an HTML template
+	 */
+	@GetMapping
+	public String handleInvalidGet() {
+	    return "redirect:/viewusers";
+	}
+	
 	/**
 	 * @param id - {@link Long} id of User object to add to the Springboot model
 	 * @param m  - a {@link Model} used to pass attributes to the view
@@ -102,13 +113,13 @@ public class EditUserController {
 
 		if (dto.getNewPassword() != null && !dto.getNewPassword().isBlank()) {
 			if (!dto.getNewPassword().equals(dto.getConfirmPassword())) {
-				result.rejectValue("password", "error.newPassword", "The passwords do not match.");
+				result.rejectValue("confirmPassword", "error.newPassword", "The passwords do not match.");
 				m.addAttribute("user", dto);
 				return userEditPage(dto.getUserId(), m);
 			}
 
 			if (!validator.isValidPassword(dto.getNewPassword())) {
-				result.rejectValue("password", "error.newPassword",
+				result.rejectValue("confirmPassword", "error.newPassword",
 						"Password does not meet complexity requirements. Must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one digit, and one special character.");
 				m.addAttribute("user", dto);
 				return userEditPage(dto.getUserId(), m);

@@ -57,7 +57,7 @@
 
 						<label for="confirmpassword">Confirm password: </label>
 						<input type="password" id="confirmpassword" name="confirmPassword" maxlength="256"><br>
-						<th:block th:each="e : ${#fields.errors('newPassword')}">
+						<th:block th:each="e : ${#fields.errors('confirmPassword')}">
 							<span style="color: red">
 								<th:block th:text="${e}"></th:block>
 							</span>
