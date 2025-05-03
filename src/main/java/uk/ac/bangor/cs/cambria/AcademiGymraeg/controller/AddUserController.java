@@ -94,12 +94,19 @@ public class AddUserController {
 	public String addUser(@ModelAttribute User user,
 			@RequestParam(required = false, defaultValue = "false") boolean admin,
 			@RequestParam(required = false, defaultValue = "false") boolean instructor, Model model) {
-
-		if (!validator.isValidEmail(user.getUsername()) || !validator.isValidPassword(user.getPassword())) {
-			logger.debug("Unable to add user");
-			addErrorMessage = "Unable to add user";
+		
+		if(!validator.isValidEmail(user.getUsername())) {
+			logger.debug("Invalid Email");
+			addErrorMessage = "Unable to add user due to invalid email.";
 			return "redirect:/addUser";
 		}
+		
+		if(!validator.isValidPassword(user.getPassword())) {
+			logger.debug("Password does not meet complexity requirements. Must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one digit, and one special character.");
+			addErrorMessage = "Password does not meet complexity requirements. Must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one digit, and one special character.";
+			return "redirect:/addUser";
+		}
+
 
 		user.setAdmin(admin);
 		user.setInstructor(instructor);

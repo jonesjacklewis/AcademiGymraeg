@@ -134,7 +134,7 @@ public class AddUserControllerTest {
 		String viewName = controller.addUser(user, false, true, mockModel);
 
 		assertEquals("redirect:/addUser", viewName);
-		assertEquals("Unable to add user", AddUserController.addErrorMessage);
+		assertEquals("Unable to add user due to invalid email.", AddUserController.addErrorMessage);
 
 		verifyNoInteractions(mockRepo);
 	}
@@ -151,7 +151,7 @@ public class AddUserControllerTest {
 		String viewName = controller.addUser(user, false, true, mockModel);
 
 		assertEquals("redirect:/addUser", viewName);
-		assertEquals("Unable to add user", AddUserController.addErrorMessage);
+		assertEquals("Password does not meet complexity requirements. Must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one digit, and one special character.", AddUserController.addErrorMessage);
 
 		verifyNoInteractions(mockRepo);
 	}
