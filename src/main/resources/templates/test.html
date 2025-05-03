@@ -26,12 +26,13 @@
 
             </div>
             
+            <div id="container">
             <div class="test-container">
               <h2>Take a Test</h2>
         
 
               <form th:action="@{/submitTest}" method="POST" th:object="${test}">
-				<p>QuestionForm</p>
+				<p>Questions:</p>
 				
 				<input type="hidden" th:field="*{testId}" />
 				
@@ -63,15 +64,15 @@
 					</div>
 
                 
-                <button type="submit">Submit</button>
+                <button id="submit-test" type="submit">Submit</button>
 
               </form>
               
               
 
         
-              <a class="back-link" href="/home">Back</a>
+              <a class="back-link" href="/home">Back to Welcome Page</a>
             </div>
-
+</div>
 </body>
 </html>

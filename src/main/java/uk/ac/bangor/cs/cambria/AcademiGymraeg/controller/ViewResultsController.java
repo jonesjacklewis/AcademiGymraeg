@@ -84,7 +84,9 @@ public class ViewResultsController {
 		tests = tests.stream().filter(t -> t.getStartDateTime().isBefore(t.getEndDateTime())).toList();
 
 		List<Result> results = rs.convertTestsToResults(tests);
-
+		
+		results = results.stream().sorted((r1, r2) -> r2.getStartDateTime().compareTo(r1.getStartDateTime())).toList();
+		
 		m.addAttribute("allresults", results);
 
 		return "viewresults";
